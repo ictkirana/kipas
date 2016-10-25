@@ -113,8 +113,8 @@ public class Main2Activity extends AppCompatActivity
 
         session = new SessionManager(Main2Activity.this);
 
-        User user = new User();
-        Intent intent = getIntent();
+        final User user = new User();
+        final Intent intent = getIntent();
         String mail = intent.getStringExtra("email");
         String pass = intent.getStringExtra("password");
         GetUser(user,mail,pass);
@@ -124,6 +124,7 @@ public class Main2Activity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent1 = new Intent(Main2Activity.this,ScanActivity.class);
+                intent1.putExtra("email_user",user.getEmail());
                 startActivity(intent1);
             }
         });

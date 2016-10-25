@@ -80,7 +80,7 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:text="Plant"
+                android:text="tgl kirim"
                 android:id="@+id/tanggalKirim"
                 android:layout_column="23"
                 android:textSize="20dp" />
