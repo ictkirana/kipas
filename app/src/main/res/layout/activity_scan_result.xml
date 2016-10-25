@@ -8,46 +8,158 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Activity.ScanActivity">
-    <LinearLayout
+
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textNo"
-            android:text="Surat Jalan"
-            android:layout_gravity="center_horizontal" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textPlant"
-            android:layout_gravity="center_horizontal"
-            android:text="plant"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textVendor"
-            android:layout_gravity="center_horizontal"
-            android:text="vendor"/>
-        <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
+
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="No Surat Jalan"
+                android:id="@+id/txtSuratJalan"
+                android:layout_column="0"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text=":"
+                android:id="@+id/separator1"
+                android:layout_column="6"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text="No"
+                android:id="@+id/noSuratJalan"
+                android:layout_column="23"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Plant"
+                android:id="@+id/txtPlant"
+                android:layout_column="0"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text=":"
+                android:id="@+id/separator2"
+                android:layout_column="6"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text="Plant"
+                android:id="@+id/Plant"
+                android:layout_column="23"
+                android:textSize="20dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Tanggal Kirim"
+                android:id="@+id/txtTgglKirim"
+                android:layout_column="0"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text=":"
+                android:id="@+id/separator3"
+                android:layout_column="6"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text="Plant"
+                android:id="@+id/tanggalKirim"
+                android:layout_column="23"
+                android:textSize="20dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Nomor Polisi"
+                android:id="@+id/txtNoPol"
+                android:layout_column="0"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text=":"
+                android:id="@+id/separator4"
+                android:layout_column="6"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text="NoPol"
+                android:id="@+id/noPol"
+                android:layout_column="23"
+                android:textSize="20dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Tanggal Terima"
+                android:id="@+id/txtTgglTerima"
+                android:layout_column="0"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text=":"
+                android:id="@+id/separator5"
+                android:layout_column="6"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text="Terima"
+                android:id="@+id/tanggalTerima"
+                android:layout_column="23"
+                android:textSize="20dp" />
+
             <Button
+                android:id="@+id/btnPick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnSimpan"
-                android:text="Simpan"
-                android:layout_marginLeft="30dp" />
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:onClick="setDate"
+                android:text="Pilih"
+                android:layout_column="25" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnBackScan"
                 android:text="Scan Ulang"
-                android:layout_gravity="right"
-                android:layout_marginLeft="100dp" />
-        </LinearLayout>
-    </LinearLayout>
+                android:id="@+id/btnRescan"
+                android:layout_column="0" />
+
+            <Button
+                android:text="Terima"
+                android:id="@+id/btnTerima"
+                android:layout_column="24" />
+        </TableRow>
+    </TableLayout>
 
 </RelativeLayout>
