@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         username = (MaterialEditText)findViewById(R.id.inputUser);
         password = (MaterialEditText)findViewById(R.id.inputPass);
         btnLogin = (Button)findViewById(R.id.btnLogin);
-        textForgot = (TextView) findViewById(R.id.txtForgot);
+	    textForgot = (TextView) findViewById(R.id.txtForgot);
 
         textForgot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this,ForgetPassword.class));
             }
         });
+
         /*
         mFirebaseInstance = FirebaseDatabase.getInstance();
 
@@ -201,7 +202,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (hasil.equalsIgnoreCase("true")){
                                 try {
-                                    session.createSession(username.getText().toString());
+                                    session.createSession(username.getText().toString(),
+                                                            password.getText().toString());
                                 }catch (NullPointerException n){
 
                                 }

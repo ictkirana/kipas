@@ -43,6 +43,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import kiranamegatara.com.kipas.Fragment.HistoryFragment;
 import kiranamegatara.com.kipas.Fragment.HomeFragment;
@@ -65,6 +67,8 @@ public class Main2Activity extends AppCompatActivity
 
     AQuery a;
     final ArrayList<HashMap<String,String>> data = new ArrayList<HashMap<String, String>>();
+
+    private Timer timer;
 
     // urls to load navigation header background image
     // and profile image
@@ -118,6 +122,8 @@ public class Main2Activity extends AppCompatActivity
         String mail = intent.getStringExtra("email");
         String pass = intent.getStringExtra("password");
         GetUser(user,mail,pass);
+
+        session.editSessionData(user.getEmail(),user.getPassword(),user.getCompany_id(),user.getCompany_id());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -572,4 +578,31 @@ public class Main2Activity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        timer = new Timer();
+        Log.i("Main", "Invoking logout timer");
+        LogOutTimerTask logoutTimeTask = new LogOutTimerTask();
+        timer.schedule(logoutTimeTask, 900000); //auto logout in 15 minutes
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (timer != null) {
+            timer.cancel();
+            Log.i("Main", "cancel timer");
+            timer = null;
+        }
+    }
+
+    private class LogOutTimerTask extends TimerTask{
+        @Override
+        public void run() {
+            session.logout();
+            finish();
+        }
+    }
 }
