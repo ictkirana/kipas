@@ -23,6 +23,9 @@ public class SessionManager {
 
     public static final String isLogin = "isLogin";
     public static final String keyEmail = "keyEmail";
+    public static final String keyPass = "keyPass";
+    public static final String keyPlant = "keyPlant";
+    public static final String keyPort = "keyPort";
 
     public SessionManager(Context context){
         this.c = context;
@@ -30,9 +33,10 @@ public class SessionManager {
         editor = preferences.edit();
     }
 
-    public void createSession(String username){
+    public void createSession(String username, String password){
         editor.putBoolean(isLogin,true);
         editor.putString(keyEmail,username);
+        editor.putString(keyPass,password);
         editor.commit();
     }
 
@@ -62,5 +66,17 @@ public class SessionManager {
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         c.startActivity(i);
+    }
+
+    public void editSessionData(String email, String pass,String plant, String port){
+        editor.clear();
+        editor.commit();
+
+        editor.putBoolean(isLogin,true);
+        editor.putString(keyEmail,email);
+        editor.putString(keyPass,pass);
+        editor.putString(keyPlant,plant);
+        editor.putString(keyPort,port);
+        editor.commit();
     }
 }
