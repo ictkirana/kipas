@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
@@ -42,6 +43,7 @@ import kiranamegatara.com.kipas.Controller.SessionManager;
 public class LoginActivity extends AppCompatActivity {
     MaterialEditText username,password;
     Button btnLogin;
+    TextView textForgot;
 
     //private DatabaseReference mFirebaseDatabase;
     //private FirebaseDatabase mFirebaseInstance;
@@ -61,7 +63,9 @@ public class LoginActivity extends AppCompatActivity {
         username = (MaterialEditText)findViewById(R.id.inputUser);
         password = (MaterialEditText)findViewById(R.id.inputPass);
         btnLogin = (Button)findViewById(R.id.btnLogin);
+        textForgot = (TextView) findViewById(R.id.txtForgot);
 
+        textForgot.setOnClickListener(this);
         /*
         mFirebaseInstance = FirebaseDatabase.getInstance();
 

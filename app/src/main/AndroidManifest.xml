@@ -30,8 +30,9 @@
         <activity
             android:name=".Activity.Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Activity.GotoScanActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.GotoScanActivity" />
+        <activity android:name=".Activity.ForgetPassword"></activity>
     </application>
 
 </manifest>
