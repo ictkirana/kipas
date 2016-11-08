@@ -65,7 +65,12 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (Button)findViewById(R.id.btnLogin);
         textForgot = (TextView) findViewById(R.id.txtForgot);
 
-        textForgot.setOnClickListener(this);
+        textForgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this,ForgetPassword.class));
+            }
+        });
         /*
         mFirebaseInstance = FirebaseDatabase.getInstance();
 
