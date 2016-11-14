@@ -12,8 +12,7 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true">
 
         <TableRow
@@ -133,6 +132,12 @@
                 android:layout_column="23"
                 android:textSize="20dp" />
 
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <Button
                 android:id="@+id/btnPick"
                 android:layout_width="wrap_content"
@@ -142,24 +147,29 @@
                 android:layout_marginTop="10dp"
                 android:onClick="setDate"
                 android:text="Pilih"
-                android:layout_column="25" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:text="Scan Ulang"
-                android:id="@+id/btnRescan"
-                android:layout_column="0" />
-
-            <Button
-                android:text="Terima"
-                android:id="@+id/btnTerima"
-                android:layout_column="24" />
+                android:layout_column="23" />
         </TableRow>
     </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:text="Scan Ulang"
+            android:id="@+id/btnRescan"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+
+        <Button
+            android:text="Terima"
+            android:id="@+id/btnTerima"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
+
+    </LinearLayout>
 
 </RelativeLayout>

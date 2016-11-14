@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prepareListData() {
-
+/*
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
@@ -90,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d("number",data.get(i).getNosurat());
             Log.d("pabrik",data.get(i).getPlant());
             Log.d("vendor",data.get(i).getVendor());
-            */
-        }
 
+        }
+*/
     }
 
     @Override

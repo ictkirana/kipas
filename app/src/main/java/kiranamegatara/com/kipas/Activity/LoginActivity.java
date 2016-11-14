@@ -53,6 +53,12 @@ public class LoginActivity extends AppCompatActivity {
     SessionManager session;
 
     final ArrayList<HashMap<String,String>> data = new ArrayList<HashMap<String, String>>();
+
+    String id,full_name,pwd,mail,nik,company_code,plant,plant_code,
+            plant_name,company_name,authorized_warehouse,is_active,is_kirana,
+            is_reset,fail_counter,date_last_login,date_created,date_updated,
+            is_deleted,dateCrt,dateUpd;
+    String email,passwd;
     //private String userId;
 
     @Override
@@ -64,6 +70,9 @@ public class LoginActivity extends AppCompatActivity {
         password = (MaterialEditText)findViewById(R.id.inputPass);
         btnLogin = (Button)findViewById(R.id.btnLogin);
         textForgot = (TextView) findViewById(R.id.txtForgot);
+
+        email = username.getText().toString();
+        passwd = password.getText().toString();
 
         textForgot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,6 +192,9 @@ public class LoginActivity extends AppCompatActivity {
             params.put("email",username.getText().toString());
             params.put("password",password.getText().toString());
 
+            Log.d("email",""+email);
+            Log.d("password",""+passwd);
+
             ProgressDialog progress = new ProgressDialog(LoginActivity.this);
             progress.setMessage("masuk aplikasi...");
             progress.setCancelable(false);
@@ -200,15 +212,68 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(getApplicationContext(),Main2Activity.class);
 
                             if (hasil.equalsIgnoreCase("true")){
+                                JSONArray jsonarray = jsonObject.getJSONArray("data");
+                                int length = jsonarray.length();
+                                Log.d("jumlah data", "" + length);
+                                Log.d("pesan",pesan);
+                                for (int i = 0; i < jsonarray.length(); i++){
+                                    if (i == 0){
+                                        JSONObject b = jsonarray.getJSONObject(i);
+                                        id = b.getString("id");
+                                        full_name = b.getString("full_name");
+                                        pwd = b.getString("password");
+                                        mail = b.getString("email");
+                                        nik = b.getString("nik");
+                                        is_kirana = b.getString("is_kirana");
+                                        company_code = b.getString("company_code");
+                                        company_name = b.getString("company_name");
+                                        plant_code = b.getString("plant_code");
+                                        plant_name = b.getString("plant_name");
+                                        authorized_warehouse = b.getString("authorized_warehouse");
+                                        is_active = b.getString("is_active");
+                                        is_reset = b.getString("is_active");
+                                        is_deleted = b.getString("is_deleted");
+                                        fail_counter = b.getString("fail_counter");
+                                        date_created = b.getString("date_created");
+
+                                        /*
+                                        SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+                                        try {
+                                            dateCrt = String.valueOf(curFormater.parse(date_created));
+                                        } catch (android.net.ParseException e) {
+                                            e.printStackTrace();
+                                        } catch (java.text.ParseException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        date_updated = b.getString("date_updated");
+                                        try {
+                                            dateUpd = String.valueOf(curFormater.parse(date_updated));
+                                        } catch (android.net.ParseException e) {
+                                            e.printStackTrace();
+                                        } catch (java.text.ParseException e) {
+                                            e.printStackTrace();
+                                        }*/
+
+                                        Calendar c = Calendar.getInstance();
+                                        date_last_login = String.valueOf(c.getTime());
+                                    }
+                                }
                                 try {
-                                    session.createSession(username.getText().toString());
+                                    Log.d("mail",""+mail);
+                                    Log.d("plant",""+plant_code);
+                                    Log.d("company",""+company_code);
+                                    Log.d("gudang",""+authorized_warehouse);
+                                    session.createSession(mail,plant_code,company_code,authorized_warehouse);
                                 }catch (NullPointerException n){
 
                                 }
+
                                 intent.putExtra("email",username.getText().toString());
+                                intent.putExtra("fullname",full_name);
                                 intent.putExtra("password",password.getText().toString());
+                                intent.putExtra("plant",plant_code);
                                 startActivity(intent);
-                                Log.d("pesan",pesan);
                             }
                         }catch (JSONException e){
                             e.printStackTrace();

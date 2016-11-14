@@ -1,22 +1,32 @@
 package kiranamegatara.com.kipas.Fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
+import com.androidquery.callback.AjaxStatus;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import kiranamegatara.com.kipas.Controller.ExpendableListAdapter;
+import kiranamegatara.com.kipas.Model.SrtJalanModel;
 import kiranamegatara.com.kipas.R;
 import kiranamegatara.com.kipas.Controller.RealmHelper;
 import kiranamegatara.com.kipas.Controller.SessionManager;
@@ -50,8 +60,8 @@ public class HistoryFragment extends Fragment {
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
-    ArrayList<SuratJalanModel> data;
     RealmHelper realmHelper;
+    private ArrayList<SrtJalanModel> data;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -102,20 +112,54 @@ public class HistoryFragment extends Fragment {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
-        try {
-            data = realmHelper.findAll();
-        }catch (Exception e){
-        }
+        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_his_sj";
 
-        //adding header data
-        for (int i = 0 ; i < data.size(); i++){
-            /*
-            listDataHeader.add(data.get(i).getPlant());
-            List<String> detail = new ArrayList<String>();
-            detail.add(data.get(i).getNosurat());
-            listDataChild.put(listDataHeader.get(i),detail);
-            */
-        }
+        session = new SessionManager(getContext());
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+        String plant = user.get(SessionManager.keyPlant);
+
+        Log.d("plant dari session",""+ plant);
+
+        HashMap<String,String> params = new HashMap<String, String>();
+        params.put("plant_code","DWJ1");
+
+        ProgressDialog progress = new ProgressDialog(getContext());
+        progress.setMessage("unduh data...");
+        progress.setCancelable(false);
+        progress.setIndeterminate(false);
+
+        aQuery.progress(progress).ajax(url,params,String.class, new AjaxCallback<String>(){
+            @Override
+            public void callback(String url, String object, AjaxStatus status) {
+                if (object != null){
+                    try {
+                        JSONObject jsonObject = new JSONObject(object);
+                        String hasil = jsonObject.getString("result");
+                        String pesan = jsonObject.getString("msg");
+                        Toast.makeText(getContext(),hasil,Toast.LENGTH_LONG).show();
+                        Log.d("surat_jalan","hasil" + hasil);
+
+                        if (hasil.equalsIgnoreCase("true")){
+                            JSONArray jsonarray = jsonObject.getJSONArray("data");
+                            int length = jsonarray.length();
+                            Log.d("jumlah surat jalan", "" + length);
+                            Log.d("pesan",pesan);
+                            for (int i = 0; i < jsonarray.length(); i++){
+                                JSONObject b = jsonarray.getJSONObject(i);
+                                String nosurat =b.getString("srt_jln_no");
+                                String plant = b.getString("plant_code");
+                                Log.d("plant_code",plant);
+                                Log.d("srt_jnl_no",nosurat);
+                                realmHelper.addBarcode(nosurat,plant);
+                            }
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -126,6 +170,25 @@ public class HistoryFragment extends Fragment {
         expListView = (ExpandableListView)view.findViewById(R.id.lvExp);
         // preparing list data
         prepareListData();
+
+        data = new ArrayList<>();
+        try {
+            data = realmHelper.findAll();
+        }catch (Exception e){
+
+        }
+
+        for (int i = 0;i < data.size(); i++){
+            listDataHeader.add(data.get(i).getNosurat());
+            List<String> detail = new ArrayList<String>();
+            detail.add(data.get(i).getPlant());
+            listDataChild.put(listDataHeader.get(i),detail);
+            //detail.clear();
+        }
+        int jumlah = listDataHeader.size();
+        int jumlah2 = listDataChild.size();
+        int jumlah3 = data.size();
+        Log.d("jumlah" , jumlah + " " + jumlah2 + " " + jumlah3);
 
         listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
 

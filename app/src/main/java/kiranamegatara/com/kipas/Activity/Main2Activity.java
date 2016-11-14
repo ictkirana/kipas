@@ -62,6 +62,7 @@ public class Main2Activity extends AppCompatActivity
     private Toolbar toolbar;
     private FloatingActionButton fab;
     private SessionManager session;
+    private User user;
 
     AQuery a;
     final ArrayList<HashMap<String,String>> data = new ArrayList<HashMap<String, String>>();
@@ -87,6 +88,10 @@ public class Main2Activity extends AppCompatActivity
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
 
+    String id,full_name,pwd,mail,nik,company_code,plant,plant_code,
+            plant_name,company_name,authorized_warehouse,is_active,is_kirana,
+            is_reset,fail_counter,date_last_login,date_created,date_updated,
+            is_deleted,dateCrt,dateUpd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,26 +116,140 @@ public class Main2Activity extends AppCompatActivity
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
 
-        session = new SessionManager(Main2Activity.this);
+        session = new SessionManager(getApplicationContext());
 
-        final User user = new User();
+        //final User user = new User();
         final Intent intent = getIntent();
-        String mail = intent.getStringExtra("email");
+        final String email = intent.getStringExtra("email");
+        full_name = intent.getStringExtra("fullname");
         String pass = intent.getStringExtra("password");
-        GetUser(user,mail,pass);
+        plant = intent.getStringExtra("plant");
+        //GetUser(mail,pass);
+
+        /*
+        a = new AQuery(Main2Activity.this);
+        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_login";
+
+        HashMap<String,String> params = new HashMap<String, String>();
+        params.put("email",email);
+        params.put("password",pass);
+
+        ProgressDialog progress = new ProgressDialog(Main2Activity.this);
+        progress.setCancelable(false);
+        progress.setIndeterminate(false);
+        a.progress(progress).ajax(url,params,String.class, new AjaxCallback<String>(){
+            @Override
+            public void callback(String url, String object, AjaxStatus status) {
+                if (object != null){
+                    try {
+                        JSONObject jsonObject = new JSONObject(object);
+                        String hasil = jsonObject.getString("result");
+                        String pesan = jsonObject.getString("msg");
+                        Toast.makeText(getApplicationContext(),hasil,Toast.LENGTH_LONG).show();
+
+                        if (hasil.equalsIgnoreCase("true")){
+                            Log.d("pesan",pesan);
+                            JSONArray jsonarray = jsonObject.getJSONArray("data");
+                            int length = jsonarray.length();
+                            Log.d("jumlah data", "" + length);
+                            for (int i = 0; i < jsonarray.length(); i++){
+                                if (i == 0){
+                                    JSONObject b = jsonarray.getJSONObject(i);
+                                    id = b.getString("id");
+                                    full_name = b.getString("full_name");
+                                    pwd = b.getString("password");
+                                    mail = b.getString("email");
+                                    nik = b.getString("nik");
+                                    is_kirana = b.getString("is_kirana");
+                                    company_code = b.getString("company_code");
+                                    company_name = b.getString("company_name");
+                                    plant_code = b.getString("plant_code");
+                                    plant_name = b.getString("plant_name");
+                                    authorized_warehouse = b.getString("authorized_warehouse");
+                                    is_active = b.getString("is_active");
+                                    is_reset = b.getString("is_active");
+                                    is_deleted = b.getString("is_deleted");
+                                    fail_counter = b.getString("fail_counter");
+                                    date_created = b.getString("date_created");
+
+                                    SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
+                                    try {
+                                        dateCrt = String.valueOf(curFormater.parse(date_created));
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    } catch (java.text.ParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    date_updated = b.getString("date_updated");
+                                    try {
+                                        dateUpd = String.valueOf(curFormater.parse(date_updated));
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    } catch (java.text.ParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    Calendar c = Calendar.getInstance();
+                                    date_last_login = String.valueOf(c.getTime());
+
+                                    user = new User();
+                                    user.setId(id);
+                                    user.setFull_name(full_name);
+                                    user.setPassword(pwd);
+                                    user.setEmail(mail);
+                                    user.setNik(nik);
+                                    user.setCompany_code(company_code);
+                                    user.setCompany_name(company_name);
+                                    user.setPlant_code(plant_code);
+                                    user.setPlant_name(plant_code);
+                                    user.setAuthorized_warehouse(authorized_warehouse);
+                                    user.setIs_kirana(is_kirana);
+                                    user.setIs_active(is_active);
+                                    user.setIs_reset(is_reset);
+                                    user.setIs_deleted(is_deleted);
+                                    user.setFail_counter(fail_counter);
+                                    user.setDate_created(date_created);
+                                    user.setDate_updated(date_updated);
+                                    user.setDate_last_login(date_last_login);
+
+                                    Log.d("plant_code",""+plant_code);
+                                }
+                            }
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        */
+
+        //session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        //mail = user.get(SessionManager.keyEmail);
+        //plant = user.get(SessionManager.keyPlant);
+
+        Log.d("mail",""+email);
+        Log.d("plant",""+plant);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent1 = new Intent(Main2Activity.this,ScanActivity.class);
-                intent1.putExtra("email_user",user.getEmail());
+                intent1.putExtra("email_user",email);
+                intent1.putExtra("plant",plant);
+                intent1.putExtra("fullname",full_name);
                 startActivity(intent1);
             }
         });
 
         // load nav menu header data
-        loadNavHeader(user);
+        loadNavHeader();
 
         // initializing navigation menu
         setUpNavigationView();
@@ -153,19 +272,8 @@ public class Main2Activity extends AppCompatActivity
 
     }
 
-    private User GetUser(User user, String email, String password){
-        final String[] full_name = new String[1];
-        final String[] pwd = new String[1];
-        final String[] mail = new String[1];
-        final String[] nik = new String[1];
-        final String[] company_id = new String[1];
-        final String[] company_name = new String[1];
-        final String[] is_active = new String[1];
-        final String[] is_reset = new String[1];
-        final String[] fail_counter = new String[1];
-        final String[] date_last_login = new String[1];
-        final String[] date_created = new String[1];
-        final String[] date_updated = new String[1];
+    /*
+    private void GetUser(String email, String password){
 
         a = new AQuery(Main2Activity.this);
         String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_login";
@@ -190,35 +298,40 @@ public class Main2Activity extends AppCompatActivity
                         if (hasil.equalsIgnoreCase("true")){
                             Log.d("pesan",pesan);
                             JSONArray jsonarray = jsonObject.getJSONArray("data");
-
+                            int length = jsonarray.length();
+                            Log.d("jumlah data", "" + length);
                             for (int i = 0; i < jsonarray.length(); i++){
-                                if (i == 0) {
+                                if (i == 0){
                                     JSONObject b = jsonarray.getJSONObject(i);
-                                    full_name[0] = b.getString("full_name");
-                                    pwd[0] = b.getString("password");
-                                    mail[0] = b.getString("email");
-                                    nik[0] = b.getString("nik");
-                                    company_id[0] = b.getString("company_id");
-                                    company_name[0] = b.getString("company_name");
-                                    is_active[0] = b.getString("is_active");
-                                    is_reset[0] = b.getString("is_active");
-                                    fail_counter[0] = b.getString("fail_counter");
-                                    date_created[0] = b.getString("date_created");
+                                    id = b.getString("id");
+                                    full_name = b.getString("full_name");
+                                    pwd = b.getString("password");
+                                    mail = b.getString("email");
+                                    nik = b.getString("nik");
+                                    is_kirana = b.getString("is_kirana");
+                                    company_code = b.getString("company_code");
+                                    company_name = b.getString("company_name");
+                                    plant_code = b.getString("plant_code");
+                                    plant_name = b.getString("plant_name");
+                                    authorized_warehouse = b.getString("authorized_warehouse");
+                                    is_active = b.getString("is_active");
+                                    is_reset = b.getString("is_active");
+                                    is_deleted = b.getString("is_deleted");
+                                    fail_counter = b.getString("fail_counter");
+                                    date_created = b.getString("date_created");
 
                                     SimpleDateFormat curFormater = new SimpleDateFormat("yyyy-MM-dd");
-                                    Date dateCrt = new Date();
                                     try {
-                                        dateCrt = curFormater.parse(date_created[0]);
+                                        dateCrt = String.valueOf(curFormater.parse(date_created));
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     } catch (java.text.ParseException e) {
                                         e.printStackTrace();
                                     }
 
-                                    date_updated[0] = b.getString("date_updated");
-                                    Date dateUpd = new Date();
+                                    date_updated = b.getString("date_updated");
                                     try {
-                                        dateUpd = curFormater.parse(date_updated[0]);
+                                        dateUpd = String.valueOf(curFormater.parse(date_updated));
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     } catch (java.text.ParseException e) {
@@ -226,7 +339,27 @@ public class Main2Activity extends AppCompatActivity
                                     }
 
                                     Calendar c = Calendar.getInstance();
-                                    date_last_login[0] = String.valueOf(c.getTime());
+                                    date_last_login = String.valueOf(c.getTime());
+
+                                    user.setId(id);
+                                    user.setFull_name(full_name);
+                                    user.setPassword(pwd);
+                                    user.setEmail(mail);
+                                    user.setNik(nik);
+                                    user.setCompany_code(company_code);
+                                    user.setCompany_name(company_name);
+                                    user.setPlant_code(plant_code);
+                                    user.setPlant_name(plant_code);
+                                    user.setAuthorized_warehouse(authorized_warehouse);
+                                    user.setIs_kirana(is_kirana);
+                                    user.setIs_active(is_active);
+                                    user.setIs_reset(is_reset);
+                                    user.setIs_deleted(is_deleted);
+                                    user.setFail_counter(fail_counter);
+                                    user.setDate_created(date_created);
+                                    user.setDate_updated(date_updated);
+                                    user.setDate_last_login(date_last_login);
+
                                 }
                             }
                         }
@@ -236,19 +369,9 @@ public class Main2Activity extends AppCompatActivity
                 }
             }
         });
-        user.setFull_name(full_name[0]);
-        user.setPassword(pwd[0]);
-        user.setEmail(mail[0]);
-        user.setNik(nik[0]);
-        user.setCompany_id(company_id[0]);
-        user.setCompany_name(company_name[0]);
-        user.setIs_active(is_active[0]);
-        user.setIs_reset(is_reset[0]);
-        user.setFail_counter(fail_counter[0]);
-        user.setDate_created(date_created[0]);
-        user.setDate_updated(date_updated[0]);
-        return user;
+        //return user;
     };
+*/
 
     private void setUpNavigationView() {
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
@@ -405,10 +528,10 @@ public class Main2Activity extends AppCompatActivity
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
 
-    private void loadNavHeader(User user) {
+    private void loadNavHeader() {
         // name, website
-        txtName.setText(user.getFull_name());
-        txtWebsite.setText(user.getEmail());
+        txtName.setText(full_name);
+        txtWebsite.setText(mail);
 
         // loading header background image
         Glide.with(this).load(urlNavHeaderBg)

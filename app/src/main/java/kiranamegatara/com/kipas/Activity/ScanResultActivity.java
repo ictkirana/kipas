@@ -23,9 +23,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import kiranamegatara.com.kipas.R;
 import kiranamegatara.com.kipas.Controller.RealmHelper;
@@ -39,6 +41,8 @@ public class ScanResultActivity extends AppCompatActivity {
     AQuery a;
 
     RealmHelper realmHelper;
+
+    String nosurat,tanggalKirim,pabrik,polisi_no,fullname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +66,17 @@ public class ScanResultActivity extends AppCompatActivity {
         showDate(year, month + 1, day);
 
         Intent intent = getIntent();
-        final String nosurat = intent.getStringExtra("surat_jalan_no");
-        final String tanggalKirim = intent.getStringExtra("tglKirim");
-        final String pabrik = intent.getStringExtra("Plant");
+        nosurat = intent.getStringExtra("surat_jalan_no");
+        tanggalKirim = intent.getStringExtra("tglKirim");
+        pabrik = intent.getStringExtra("plant");
+        polisi_no = intent.getStringExtra("polisi_no");
         email = intent.getStringExtra("email_user");
+        fullname = intent.getStringExtra("fullname");
 
         number.setText(nosurat);
         plant.setText(pabrik);
         tglKirim.setText(tanggalKirim);
+        nopol.setText(polisi_no);
 
         simpan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,13 +99,52 @@ public class ScanResultActivity extends AppCompatActivity {
     }
 
     private void SaveSuratJalan() {
+        a = new AQuery(ScanResultActivity.this);
+        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/scan_sj";
+
+        Log.d("tanggal terima",""+ tglTerima.getText().toString());
+
+        HashMap<String,String> params = new HashMap<String, String>();
+        params.put("'srt_jln_no'",nosurat);
+        params.put("'date_scaned'",tglTerima.getText().toString());
+        params.put("'user_full_name'",fullname);
+        params.put("plant_code",pabrik);
+        params.put("'date_received'",tglTerima.getText().toString());
+
+        ProgressDialog progress = new ProgressDialog(getApplicationContext());
+        progress.setMessage("simpan data...");
+        progress.setCancelable(false);
+        progress.setIndeterminate(false);
+
+        a.progress(progress).ajax(url,params,String.class, new AjaxCallback<String>(){
+            @Override
+            public void callback(String url, String object, AjaxStatus status) {
+                if (object != null){
+                    try {
+                        JSONObject jsonObject = new JSONObject(object);
+                        String hasil = jsonObject.getString("result");
+                        String pesan = jsonObject.getString("msg");
+                        Log.d("surat_jalan","hasil " + hasil);
+                        if (hasil.equalsIgnoreCase("true")){
+                            JSONArray jsonarray = jsonObject.getJSONArray("data");
+                            int length = jsonarray.length();
+                            Log.d("jumlah surat jalan", "" + length);
+                            Log.d("pesan",pesan);
+                            Toast.makeText(getApplicationContext(),"Tersimpan",Toast.LENGTH_LONG).show();
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
     }
 
 
     private void showDate(int year, int i, int day) {
-        tglTerima.setText(new StringBuilder().append(day).append("/")
-                .append(month).append("/").append(year));
+        tglTerima.setText(new StringBuilder().append(year).append("-")
+                .append(month).append("-").append(day));
     }
 
 
@@ -115,7 +161,11 @@ public class ScanResultActivity extends AppCompatActivity {
         if (id == 999){
             DatePickerDialog datePickerDialog = new DatePickerDialog(this,myDateListener, year, month,day);
             datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-            calendar.add(Calendar.DAY_OF_MONTH,-7);
+            if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+                calendar.add(Calendar.DAY_OF_MONTH, -3);
+            }else {
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+            }
             datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
             return datePickerDialog;
         }

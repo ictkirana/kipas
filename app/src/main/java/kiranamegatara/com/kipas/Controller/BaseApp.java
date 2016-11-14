@@ -27,11 +27,9 @@ public class BaseApp extends Application{
         public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
             RealmSchema schema = realm.getSchema();
             if (oldVersion == 0){
-                schema.create("SuratJalan")
-                        .addField("id",int.class)
-                        .addField("nosurat",String.class)
-                        .addField("plant",String.class)
-                        .addField("vendor",String.class);
+                schema.create("SrtJalan")
+                        .addField("number",String.class)
+                        .addField("plant",String.class);
                 oldVersion++;
             }
         }
