@@ -30,7 +30,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     ZXingScannerView mScannerView;
     RealmHelper realmHelper;
     AQuery a;
-    String email,plant,nopol;
+    String email,plant,nopol,fullname, nik,gudang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,9 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         Intent inte = getIntent();
         email = inte.getStringExtra("email_user");
         plant = inte.getStringExtra("plant");
+        fullname = inte.getStringExtra("fullname");
+        nik = inte.getStringExtra("nik");
+        gudang = inte.getStringExtra("gudang");
         Log.d("email",""+email);
         Log.d("plant",""+plant);
         QrScanner();
@@ -59,7 +62,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         Toast.makeText(getApplicationContext(),rawResult.getText().toString(),Toast.LENGTH_LONG).show();
 
         a = new AQuery(ScanActivity.this);
-        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_sj";
+        //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_sj";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
 
 
         //final String[] plant = new String[1];
@@ -106,6 +110,9 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             intent.putExtra("tglKirim", tglKirim[0]);
                             intent.putExtra("email_user",email);
                             intent.putExtra("polisi_no",nopol);
+                            intent.putExtra("fullname",fullname);
+                            intent.putExtra("nik",nik);
+                            intent.putExtra("gudang",gudang);
                             startActivity(intent);
                         }else {
                             /*

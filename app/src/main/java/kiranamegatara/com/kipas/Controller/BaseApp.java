@@ -1,6 +1,7 @@
 package kiranamegatara.com.kipas.Controller;
 
 import android.app.Application;
+import android.os.StrictMode;
 
 import io.realm.DynamicRealm;
 import io.realm.Realm;
@@ -15,10 +16,10 @@ public class BaseApp extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        RealmConfiguration configuration = new RealmConfiguration.Builder(this)
+        RealmConfiguration config = new RealmConfiguration.Builder(this)
                 .schemaVersion(0)
                 .migration(new DataMigration()).build();
-        Realm.setDefaultConfiguration(configuration);
+        Realm.setDefaultConfiguration(config);
     }
 
     private class DataMigration implements RealmMigration {
@@ -30,6 +31,13 @@ public class BaseApp extends Application{
                 schema.create("SrtJalan")
                         .addField("number",String.class)
                         .addField("plant",String.class);
+/*
+                        .addField("gudang",String.class)
+                        .addField("fullname", String.class)
+                        .addField("is_scaned",String.class)
+                        .addField("date_scaned",String.class)
+                        .addField("date_received",String.class);
+*/
                 oldVersion++;
             }
         }

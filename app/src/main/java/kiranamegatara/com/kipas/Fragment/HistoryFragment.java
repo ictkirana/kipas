@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import kiranamegatara.com.kipas.Controller.ExpendableListAdapter;
+import kiranamegatara.com.kipas.Model.LoginUser;
+import kiranamegatara.com.kipas.Model.LoginUserModel;
 import kiranamegatara.com.kipas.Model.SrtJalanModel;
 import kiranamegatara.com.kipas.R;
 import kiranamegatara.com.kipas.Controller.RealmHelper;
@@ -62,6 +64,8 @@ public class HistoryFragment extends Fragment {
     HashMap<String, List<String>> listDataChild;
     RealmHelper realmHelper;
     private ArrayList<SrtJalanModel> data;
+    private ArrayList<LoginUserModel> usermodel;
+    String pabrik;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -94,7 +98,11 @@ public class HistoryFragment extends Fragment {
         }
 
         aQuery = new AQuery(getContext());
-        realmHelper = new RealmHelper(getContext());
+
+        session = new SessionManager(getContext());
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+        pabrik = user.get(SessionManager.keyPlant);
 
         // get the listview
         //expListView = (ExpandableListView);
@@ -112,17 +120,31 @@ public class HistoryFragment extends Fragment {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
-        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_his_sj";
+        //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_his_sj";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_his_sj";
+        realmHelper = new RealmHelper(getContext());
 
         session = new SessionManager(getContext());
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
-        String plant = user.get(SessionManager.keyPlant);
+        //String plant = user.get(SessionManager.keyPlant);
+        String plant = "DWJ1";
+/*
+        usermodel = new ArrayList<>();
+        try {
+            usermodel = realmHelper.findAllUser();
+            for (int i = 0;i < usermodel.size(); i++){
+            }
+        }catch (Exception e){
 
-        Log.d("plant dari session",""+ plant);
+        }
+        String pabrik = usermodel.get(0).getPlant();
+        */
+        Log.d("plant dari session",""+ pabrik);
+       // Log.d("plant dari realm",""+ pabrik);
 
         HashMap<String,String> params = new HashMap<String, String>();
-        params.put("plant_code","DWJ1");
+        params.put("plant_code",plant);
 
         ProgressDialog progress = new ProgressDialog(getContext());
         progress.setMessage("unduh data...");
@@ -149,9 +171,17 @@ public class HistoryFragment extends Fragment {
                                 JSONObject b = jsonarray.getJSONObject(i);
                                 String nosurat =b.getString("srt_jln_no");
                                 String plant = b.getString("plant_code");
-                                Log.d("plant_code",plant);
-                                Log.d("srt_jnl_no",nosurat);
+                                String gudang = b.getString("warehouse_code");
+                                String fullname = b.getString("user_full_name");
+                                String is_scaned = "1";
+                                String date_scaned = b.getString("date_scaned");
+                                String date_received = b.getString("date_received");
+                                //realmHelper.addBarcode(nosurat,plant,gudang,fullname,is_scaned,date_scaned,date_received);
                                 realmHelper.addBarcode(nosurat,plant);
+                                //listDataHeader.add(nosurat);
+                                //List<String> detail = new ArrayList<String>();
+                                //detail.add(plant);
+                                //listDataChild.put(listDataHeader.get(i),detail);
                             }
                         }
                     }catch (JSONException e){
@@ -168,6 +198,15 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_history, container, false);
         expListView = (ExpandableListView)view.findViewById(R.id.lvExp);
+
+
+        try {
+            realmHelper.deleteRealm();
+        }catch (Exception e){
+
+        }
+
+
         // preparing list data
         prepareListData();
 
@@ -179,10 +218,16 @@ public class HistoryFragment extends Fragment {
         }
 
         for (int i = 0;i < data.size(); i++){
-            listDataHeader.add(data.get(i).getNosurat());
-            List<String> detail = new ArrayList<String>();
-            detail.add(data.get(i).getPlant());
-            listDataChild.put(listDataHeader.get(i),detail);
+           // if (data.get(i).getIs_scaned() == "1" ) {
+                listDataHeader.add(data.get(i).getNosurat());
+                List<String> detail = new ArrayList<String>();
+            //    detail.add(data.get(i).getFullname());
+                detail.add(data.get(i).getPlant());
+            //    detail.add(data.get(i).getGudang());
+            //    detail.add(data.get(i).getDate_scaned());
+            //    detail.add(data.get(i).getDate_received());
+                listDataChild.put(listDataHeader.get(i), detail);
+           // }
             //detail.clear();
         }
         int jumlah = listDataHeader.size();
@@ -194,6 +239,13 @@ public class HistoryFragment extends Fragment {
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
+/*
+        try {
+            realmHelper.deleteRealm();
+        }catch (Exception e){
+
+        }
+*/
         return view;
     }
 

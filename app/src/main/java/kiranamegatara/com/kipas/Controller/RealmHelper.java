@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
+import kiranamegatara.com.kipas.Model.LoginUser;
+import kiranamegatara.com.kipas.Model.LoginUserModel;
 import kiranamegatara.com.kipas.Model.SrtJalan;
 import kiranamegatara.com.kipas.Model.SrtJalanModel;
 import kiranamegatara.com.kipas.Model.SuratJalan;
@@ -22,7 +24,7 @@ public class RealmHelper {
     private RealmResults<SrtJalan> realmResults;
     private Context c;
 
-    public RealmHelper(Context c){
+    public RealmHelper(Context c) {
         this.c = c;
         this.realm = realm.getInstance(c);
     }
@@ -40,21 +42,58 @@ public class RealmHelper {
         //Toast.makeText(c,"Berhasil Simpan",Toast.LENGTH_LONG).show();
     }
 
+/*
+    public void addBarcode(String number, String plant,String gudang,String fullname,
+                           String is_scaned, String date_scaned,String date_received){
+
+        SrtJalan srtJalan = new SrtJalan();
+        srtJalan.setNosurat(number);
+        srtJalan.setGudang(gudang);
+        srtJalan.setFullname(fullname);
+        srtJalan.setIs_scaned(is_scaned);
+        srtJalan.setDate_scaned(date_scaned);
+        srtJalan.setDate_received(date_received);
+
+        realm.beginTransaction();
+        realm.copyToRealm(srtJalan);
+        realm.commitTransaction();
+
+        //Toast.makeText(c,"Berhasil Simpan",Toast.LENGTH_LONG).show();
+    }
+*/
+/*
+    public void addUser(String nik,String fullname,String plant,String gudang){
+        LoginUser user = new LoginUser();
+        user.setNik(nik);
+        user.setFullname(fullname);
+        user.setPlant(plant);
+        user.setGudang(gudang);
+
+        realm.beginTransaction();
+        realm.copyFromRealm(user);
+        realm.commitTransaction();
+    }
+*/
     public ArrayList<SrtJalanModel> findAll(){
         ArrayList<SrtJalanModel> data = new ArrayList<>();
         realmResults = realm.where(SrtJalan.class).findAll();
         if (realmResults.size() > 0){
             for (int i = 0; i < realmResults.size(); i++){
-                String number;
-                String pabrik;
+                String number,pabrik,gudang,fullname,is_scaned,date_scaned,date_received;
 
                 number = realmResults.get(i).getNosurat();
                 pabrik = realmResults.get(i).getPlant();
+                //gudang = realmResults.get(i).getGudang();
+                //fullname = realmResults.get(i).getFullname();
+                //is_scaned = realmResults.get(i).getIs_scaned();
+                //date_scaned = realmResults.get(i).getDate_scaned();
+                //date_received = realmResults.get(i).getDate_received();
 
                 Log.d("number",number);
                 Log.d("pabrik",pabrik);
 
 
+                //data.add(new SrtJalanModel(number,pabrik,gudang,fullname,is_scaned,date_scaned,date_received));
                 data.add(new SrtJalanModel(number,pabrik));
             }
         }else {
@@ -63,7 +102,32 @@ public class RealmHelper {
 
         return data;
     }
+/*
+    public ArrayList<LoginUserModel> findAllUser(){
+        ArrayList<LoginUserModel> data = new ArrayList<>();
+        realmResultsUser = realm.where(LoginUser.class).findAll();
+        if (realmResultsUser.size() > 0){
+            for (int i = 0; i < realmResults.size(); i++){
+                String nik;
+                String fullname;
+                String plant;
+                String gudang;
 
+                nik = realmResultsUser.get(i).getNik();
+                fullname = realmResultsUser.get(i).getFullname();
+                plant = realmResultsUser.get(i).getPlant();
+                gudang = realmResultsUser.get(i).getGudang();
+
+
+                data.add(new LoginUserModel(nik,fullname,plant,gudang));
+            }
+        }else {
+            Toast.makeText(c,"Tidak ada data disimpan",Toast.LENGTH_LONG).show();
+        }
+
+        return data;
+    }
+*/
     public ArrayList<SrtJalanModel> deleteRealm(){
         ArrayList<SrtJalanModel> data = new ArrayList<>();
         realmResults = realm.where(SrtJalan.class).findAll();
@@ -72,4 +136,14 @@ public class RealmHelper {
         realm.commitTransaction();
         return data;
     }
+/*
+    public ArrayList<LoginUserModel> deleteUser(){
+        ArrayList<LoginUserModel> data = new ArrayList<>();
+        realmResultsUser = realm.where(LoginUser.class).findAll();
+        realm.beginTransaction();
+        realmResultsUser.clear();
+        realm.commitTransaction();
+        return data;
+    }
+*/
 }

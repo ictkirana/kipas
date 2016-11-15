@@ -36,6 +36,9 @@ import java.util.Date;
 import java.util.HashMap;
 
 import kiranamegatara.com.kipas.Controller.Helper;
+import kiranamegatara.com.kipas.Controller.RealmHelper;
+import kiranamegatara.com.kipas.Model.LoginUserModel;
+import kiranamegatara.com.kipas.Model.SrtJalanModel;
 import kiranamegatara.com.kipas.Model.User;
 import kiranamegatara.com.kipas.R;
 import kiranamegatara.com.kipas.Controller.SessionManager;
@@ -61,6 +64,10 @@ public class LoginActivity extends AppCompatActivity {
     String email,passwd;
     //private String userId;
 
+
+    RealmHelper realmHelper;
+    private ArrayList<LoginUserModel> userModels;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
         email = username.getText().toString();
         passwd = password.getText().toString();
+//        realmHelper = new RealmHelper(LoginActivity.this);
 
         textForgot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this,ForgetPassword.class));
             }
         });
+
         /*
         mFirebaseInstance = FirebaseDatabase.getInstance();
 
@@ -186,7 +195,8 @@ public class LoginActivity extends AppCompatActivity {
             */
 
             a = new AQuery(LoginActivity.this);
-            String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_login";
+            //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_login";
+            String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_login";
 
             HashMap<String,String> params = new HashMap<String, String>();
             params.put("email",username.getText().toString());
@@ -273,6 +283,9 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("fullname",full_name);
                                 intent.putExtra("password",password.getText().toString());
                                 intent.putExtra("plant",plant_code);
+                                intent.putExtra("nik",nik);
+                                intent.putExtra("gudang",authorized_warehouse);
+                                //realmHelper.addUser(nik,full_name,plant_code,authorized_warehouse);
                                 startActivity(intent);
                             }
                         }catch (JSONException e){

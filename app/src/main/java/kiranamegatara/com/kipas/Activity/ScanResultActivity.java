@@ -42,7 +42,7 @@ public class ScanResultActivity extends AppCompatActivity {
 
     RealmHelper realmHelper;
 
-    String nosurat,tanggalKirim,pabrik,polisi_no,fullname;
+    String nosurat,tanggalKirim,pabrik,polisi_no,fullname,nik,gudang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,8 @@ public class ScanResultActivity extends AppCompatActivity {
         polisi_no = intent.getStringExtra("polisi_no");
         email = intent.getStringExtra("email_user");
         fullname = intent.getStringExtra("fullname");
+        nik = intent.getStringExtra("nik");
+        gudang = intent.getStringExtra("gudang");
 
         number.setText(nosurat);
         plant.setText(pabrik);
@@ -100,16 +102,25 @@ public class ScanResultActivity extends AppCompatActivity {
 
     private void SaveSuratJalan() {
         a = new AQuery(ScanResultActivity.this);
-        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/scan_sj";
+        //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/scan_sj";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/scan_sj";
 
-        Log.d("tanggal terima",""+ tglTerima.getText().toString());
+        Log.d("date_received",""+ tglTerima.getText().toString());
+        Log.d("srt_jln_no",""+ nosurat);
+        Log.d("date_scaned",""+ tglTerima.getText().toString());
+        Log.d("user_full_name",""+ fullname);
+        Log.d("plant_code",""+ pabrik);
+        Log.d("nik",""+ nik);
+        Log.d("gudang",""+ gudang);
 
         HashMap<String,String> params = new HashMap<String, String>();
-        params.put("'srt_jln_no'",nosurat);
-        params.put("'date_scaned'",tglTerima.getText().toString());
-        params.put("'user_full_name'",fullname);
+        params.put("srt_jln_no",nosurat);
+        params.put("date_scaned",tglTerima.getText().toString());
+        params.put("user_full_name",fullname);
         params.put("plant_code",pabrik);
-        params.put("'date_received'",tglTerima.getText().toString());
+        params.put("date_received",tglTerima.getText().toString());
+        params.put("nik",nik);
+        params.put("warehouse_code",gudang);
 
         ProgressDialog progress = new ProgressDialog(getApplicationContext());
         progress.setMessage("simpan data...");
@@ -126,10 +137,10 @@ public class ScanResultActivity extends AppCompatActivity {
                         String pesan = jsonObject.getString("msg");
                         Log.d("surat_jalan","hasil " + hasil);
                         if (hasil.equalsIgnoreCase("true")){
-                            JSONArray jsonarray = jsonObject.getJSONArray("data");
-                            int length = jsonarray.length();
-                            Log.d("jumlah surat jalan", "" + length);
-                            Log.d("pesan",pesan);
+                        //    JSONArray jsonarray = jsonObject.getJSONArray("data");
+                        //    int length = jsonarray.length();
+                        //    Log.d("jumlah surat jalan", "" + length);
+                       //     Log.d("pesan",pesan);
                             Toast.makeText(getApplicationContext(),"Tersimpan",Toast.LENGTH_LONG).show();
                         }
                     }catch (JSONException e){

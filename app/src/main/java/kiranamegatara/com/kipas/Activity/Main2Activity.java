@@ -48,6 +48,7 @@ import java.util.TimerTask;
 
 import kiranamegatara.com.kipas.Fragment.HistoryFragment;
 import kiranamegatara.com.kipas.Fragment.HomeFragment;
+import kiranamegatara.com.kipas.Fragment.Outstanding;
 import kiranamegatara.com.kipas.Model.User;
 import kiranamegatara.com.kipas.Other.CircleTransform;
 import kiranamegatara.com.kipas.R;
@@ -82,6 +83,7 @@ public class Main2Activity extends AppCompatActivity
     // tags used to attach the fragments
     private static final String TAG_HOME = "home";
     private static final String TAG_HISTORY = "history";
+    private static final String TAG_OUTSTANDING = "outstanding";
     private static final String TAG_LOG_OUT = "logout";
     public static String CURRENT_TAG = TAG_HOME;
 
@@ -126,8 +128,9 @@ public class Main2Activity extends AppCompatActivity
         final Intent intent = getIntent();
         final String email = intent.getStringExtra("email");
         full_name = intent.getStringExtra("fullname");
-        String pass = intent.getStringExtra("password");
+        nik = intent.getStringExtra("nik");
         plant = intent.getStringExtra("plant");
+        authorized_warehouse = intent.getStringExtra("gudang");
         //GetUser(mail,pass);
 
         /*
@@ -240,7 +243,7 @@ public class Main2Activity extends AppCompatActivity
         Log.d("mail",""+email);
         Log.d("plant",""+plant);
 
-        session.editSessionData(user.getEmail(),user.getPassword(),user.getCompany_id(),user.getCompany_id());
+        //session.editSessionData(user.getEmail(),user.getPassword(),user.getCompany_id(),user.getCompany_id());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -250,6 +253,8 @@ public class Main2Activity extends AppCompatActivity
                 intent1.putExtra("email_user",email);
                 intent1.putExtra("plant",plant);
                 intent1.putExtra("fullname",full_name);
+                intent1.putExtra("nik",nik);
+                intent1.putExtra("gudang",authorized_warehouse);
                 startActivity(intent1);
             }
         });
@@ -394,12 +399,16 @@ public class Main2Activity extends AppCompatActivity
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
                         break;
-                    case R.id.nav_history:
+                    case R.id.nav_outstanding:
                         navItemIndex = 1;
+                        CURRENT_TAG = TAG_OUTSTANDING;
+                        break;
+                    case R.id.nav_history:
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_HISTORY;
                         break;
                     case R.id.nav_logout:
-                        navItemIndex = 2;
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_LOG_OUT;
                         break;
                     /*
@@ -513,10 +522,14 @@ public class Main2Activity extends AppCompatActivity
                 HomeFragment homeFragment = new HomeFragment();
                 return homeFragment;
             case 1:
+                // outstanding
+                Outstanding outstanding = new Outstanding();
+                return outstanding;
+            case 2:
                 // history
                 HistoryFragment historyFragment = new HistoryFragment();
                 return historyFragment;
-            case 2:
+            case 3:
                 //logout
                 Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
                 session.logout();
@@ -612,7 +625,7 @@ public class Main2Activity extends AppCompatActivity
 
             final String mail = inte.getStringExtra("email");
             final String pass = inte.getStringExtra("password");
-            oldpwd.setText(pass);
+            //oldpwd.setText(pass);
             usermail.setText(mail);
             btn_ubah.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -630,15 +643,15 @@ public class Main2Activity extends AppCompatActivity
     private void Change_Password(String mail,String pass,EditText newpwd1, EditText newpwd2) {
         String pwd1 = newpwd1.getText().toString();
         String pwd2 = newpwd2.getText().toString();
-        Toast.makeText(getApplicationContext(),pwd1,Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(),pwd2,Toast.LENGTH_LONG).show();
-        if (pwd1 == pwd2){
+        Log.d("pwd1",""+pwd1);
+        Log.d("pwd2",""+pwd2);
+        //if (pwd1 == pwd2){
             a = new AQuery(Main2Activity.this);
             String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/change_password";
-
             HashMap<String,String> params = new HashMap<String, String>();
             params.put("email",mail);
-            params.put("password",pwd1);
+            params.put("password_lama",pass);
+            params.put("password_baru",pwd1);
 
             ProgressDialog progress = new ProgressDialog(Main2Activity.this);
             progress.setCancelable(false);
@@ -662,9 +675,9 @@ public class Main2Activity extends AppCompatActivity
                     }
                 }
             });
-        }else {
-            newpwd2.setError("password baru tidak sama!");
-        }
+        //}else {
+        //    newpwd2.setError("password baru tidak sama!");
+        //}
     }
 
     @Override
@@ -675,6 +688,8 @@ public class Main2Activity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_history) {
+
+        } else if (id == R.id.nav_outstanding) {
 
         } else if (id == R.id.nav_logout) {
 

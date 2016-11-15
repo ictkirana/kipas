@@ -13,10 +13,12 @@
     <string name="nav_home">Home</string>
     <string name="nav_history">History</string>
     <string name="nav_logout">Log Out</string>
+    <string name="nav_outstanding">Outstanding</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
+        <item>Outstanding</item>
         <item>History</item>
         <item>Logout</item>
     </string-array>
