@@ -2,9 +2,6 @@ package kiranamegatara.com.kipas.Activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.icu.text.SimpleDateFormat;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,30 +13,20 @@ import android.widget.Toast;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
+import io.realm.Realm;
 import kiranamegatara.com.kipas.Controller.Helper;
 import kiranamegatara.com.kipas.Controller.RealmHelper;
-import kiranamegatara.com.kipas.Model.LoginUserModel;
-import kiranamegatara.com.kipas.Model.SrtJalanModel;
-import kiranamegatara.com.kipas.Model.User;
+import kiranamegatara.com.kipas.Model.LoginUser;
 import kiranamegatara.com.kipas.R;
 import kiranamegatara.com.kipas.Controller.SessionManager;
 
@@ -66,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     RealmHelper realmHelper;
-    private ArrayList<LoginUserModel> userModels;
+    Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         email = username.getText().toString();
         passwd = password.getText().toString();
 //        realmHelper = new RealmHelper(LoginActivity.this);
+        realm = Realm.getDefaultInstance();
 
         textForgot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -270,14 +258,20 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 }
                                 try {
-                                    Log.d("mail",""+mail);
-                                    Log.d("plant",""+plant_code);
-                                    Log.d("company",""+company_code);
-                                    Log.d("gudang",""+authorized_warehouse);
-                                    session.createSession(mail,plant_code,company_code,authorized_warehouse);
+                                    session.createSession(mail, plant_code, company_code, authorized_warehouse);
                                 }catch (NullPointerException n){
 
                                 }
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        LoginUser loginUser = realm.createObject(LoginUser.class);
+                                        loginUser.setNik(nik);
+                                        loginUser.setPlant(plant_code);
+                                        loginUser.setFullname(full_name);
+                                        loginUser.setGudang(authorized_warehouse);
+                                    }
+                                });
 
                                 intent.putExtra("email",username.getText().toString());
                                 intent.putExtra("fullname",full_name);

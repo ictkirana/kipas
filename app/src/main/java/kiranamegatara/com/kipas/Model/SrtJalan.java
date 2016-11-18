@@ -8,6 +8,34 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class SrtJalan extends RealmObject {
+
+    private String nosurat;
+    private String plant;
+    private String gudang;
+    private String fullname;
+    private String is_scaned;
+    private String date_scaned;
+    private String date_received;
+
+    public String getDate_sent() {
+        return date_sent;
+    }
+
+    public void setDate_sent(String date_sent) {
+        this.date_sent = date_sent;
+    }
+
+    public String getPolisi_no() {
+        return polisi_no;
+    }
+
+    public void setPolisi_no(String polisi_no) {
+        this.polisi_no = polisi_no;
+    }
+
+    private String date_sent;
+    private String polisi_no;
+
     public String getNosurat() {
         return nosurat;
     }
@@ -24,10 +52,6 @@ public class SrtJalan extends RealmObject {
         this.plant = plant;
     }
 
-    @PrimaryKey
-    private String nosurat;
-    private String plant;
-/*
     public String getGudang() {
         return gudang;
     }
@@ -60,11 +84,6 @@ public class SrtJalan extends RealmObject {
         this.date_scaned = date_scaned;
     }
 
-    private String gudang;
-    private String fullname;
-    private String is_scaned;
-    private String date_scaned;
-
     public String getDate_received() {
         return date_received;
     }
@@ -73,6 +92,5 @@ public class SrtJalan extends RealmObject {
         this.date_received = date_received;
     }
 
-    private String date_received;
-    */
+
 }

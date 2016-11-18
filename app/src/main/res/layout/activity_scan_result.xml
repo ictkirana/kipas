@@ -146,7 +146,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:onClick="setDate"
-                android:text="Pilih"
+                android:text="Change Date"
                 android:layout_column="23" />
         </TableRow>
     </TableLayout>

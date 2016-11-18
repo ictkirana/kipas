@@ -80,6 +80,13 @@ public class ScanResultActivity extends AppCompatActivity {
         tglKirim.setText(tanggalKirim);
         nopol.setText(polisi_no);
 
+        tglTerima.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setDate(view);
+            }
+        });
+
         simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

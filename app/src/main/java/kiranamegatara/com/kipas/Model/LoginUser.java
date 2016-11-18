@@ -6,10 +6,11 @@ import io.realm.RealmObject;
  * Created by vemfiska on 14/11/16.
  */
 
-public class LoginUser{
+public class LoginUser extends RealmObject{
     private String nik;
     private String fullname;
     private String plant;
+    private String gudang;
 
     public String getGudang() {
         return gudang;
@@ -42,6 +43,4 @@ public class LoginUser{
     public void setPlant(String plant) {
         this.plant = plant;
     }
-
-    private String gudang;
 }

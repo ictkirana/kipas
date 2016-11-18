@@ -7,14 +7,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import io.realm.Realm;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
-import kiranamegatara.com.kipas.Model.LoginUser;
-import kiranamegatara.com.kipas.Model.LoginUserModel;
 import kiranamegatara.com.kipas.Model.SrtJalan;
 import kiranamegatara.com.kipas.Model.SrtJalanModel;
-import kiranamegatara.com.kipas.Model.SuratJalan;
-import kiranamegatara.com.kipas.Model.SuratJalanModel;
 
 /**
  * Created by vemfiska on 12/10/16.
@@ -28,7 +23,7 @@ public class RealmHelper {
         this.c = c;
         this.realm = realm.getInstance(c);
     }
-
+/*
     public void addBarcode(String number, String plant){
 
         SrtJalan srtJalan = new SrtJalan();
@@ -41,13 +36,14 @@ public class RealmHelper {
 
         //Toast.makeText(c,"Berhasil Simpan",Toast.LENGTH_LONG).show();
     }
+*/
 
-/*
     public void addBarcode(String number, String plant,String gudang,String fullname,
                            String is_scaned, String date_scaned,String date_received){
 
         SrtJalan srtJalan = new SrtJalan();
         srtJalan.setNosurat(number);
+        srtJalan.setPlant(plant);
         srtJalan.setGudang(gudang);
         srtJalan.setFullname(fullname);
         srtJalan.setIs_scaned(is_scaned);
@@ -60,7 +56,7 @@ public class RealmHelper {
 
         //Toast.makeText(c,"Berhasil Simpan",Toast.LENGTH_LONG).show();
     }
-*/
+
 /*
     public void addUser(String nik,String fullname,String plant,String gudang){
         LoginUser user = new LoginUser();
@@ -83,18 +79,18 @@ public class RealmHelper {
 
                 number = realmResults.get(i).getNosurat();
                 pabrik = realmResults.get(i).getPlant();
-                //gudang = realmResults.get(i).getGudang();
-                //fullname = realmResults.get(i).getFullname();
-                //is_scaned = realmResults.get(i).getIs_scaned();
-                //date_scaned = realmResults.get(i).getDate_scaned();
-                //date_received = realmResults.get(i).getDate_received();
+                gudang = realmResults.get(i).getGudang();
+                fullname = realmResults.get(i).getFullname();
+                is_scaned = realmResults.get(i).getIs_scaned();
+                date_scaned = realmResults.get(i).getDate_scaned();
+                date_received = realmResults.get(i).getDate_received();
 
                 Log.d("number",number);
                 Log.d("pabrik",pabrik);
 
 
-                //data.add(new SrtJalanModel(number,pabrik,gudang,fullname,is_scaned,date_scaned,date_received));
-                data.add(new SrtJalanModel(number,pabrik));
+                data.add(new SrtJalanModel(number,pabrik,gudang,fullname,is_scaned,date_scaned,date_received));
+               // data.add(new SrtJalanModel(number,pabrik));
             }
         }else {
             Toast.makeText(c,"Tidak ada data disimpan",Toast.LENGTH_LONG).show();
@@ -102,32 +98,7 @@ public class RealmHelper {
 
         return data;
     }
-/*
-    public ArrayList<LoginUserModel> findAllUser(){
-        ArrayList<LoginUserModel> data = new ArrayList<>();
-        realmResultsUser = realm.where(LoginUser.class).findAll();
-        if (realmResultsUser.size() > 0){
-            for (int i = 0; i < realmResults.size(); i++){
-                String nik;
-                String fullname;
-                String plant;
-                String gudang;
 
-                nik = realmResultsUser.get(i).getNik();
-                fullname = realmResultsUser.get(i).getFullname();
-                plant = realmResultsUser.get(i).getPlant();
-                gudang = realmResultsUser.get(i).getGudang();
-
-
-                data.add(new LoginUserModel(nik,fullname,plant,gudang));
-            }
-        }else {
-            Toast.makeText(c,"Tidak ada data disimpan",Toast.LENGTH_LONG).show();
-        }
-
-        return data;
-    }
-*/
     public ArrayList<SrtJalanModel> deleteRealm(){
         ArrayList<SrtJalanModel> data = new ArrayList<>();
         realmResults = realm.where(SrtJalan.class).findAll();
@@ -136,14 +107,4 @@ public class RealmHelper {
         realm.commitTransaction();
         return data;
     }
-/*
-    public ArrayList<LoginUserModel> deleteUser(){
-        ArrayList<LoginUserModel> data = new ArrayList<>();
-        realmResultsUser = realm.where(LoginUser.class).findAll();
-        realm.beginTransaction();
-        realmResultsUser.clear();
-        realm.commitTransaction();
-        return data;
-    }
-*/
 }

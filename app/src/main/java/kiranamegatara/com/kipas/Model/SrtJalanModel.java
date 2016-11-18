@@ -8,13 +8,12 @@ public class SrtJalanModel {
 
     String nosurat;
     String plant;
-/*
     String gudang;
     String fullname;
     String is_scaned;
     String date_scaned;
     String date_received;
-*/
+
     public String getNosurat() {
         return nosurat;
     }
@@ -31,12 +30,13 @@ public class SrtJalanModel {
         this.plant = plant;
     }
 
+    /*
     public SrtJalanModel(String nosurat, String plant) {
         this.nosurat = nosurat;
         this.plant = plant;
     }
+*/
 
-/*
     public SrtJalanModel(String nosurat, String plant, String gudang,
                          String fullname, String is_scaned, String date_scaned,String date_received) {
         this.nosurat = nosurat;
@@ -47,8 +47,6 @@ public class SrtJalanModel {
         this.date_scaned = date_scaned;
         this.date_received = date_received;
     }
-*/
-/*
 
     public String getGudang() {
         return gudang;
@@ -89,6 +87,6 @@ public class SrtJalanModel {
     public void setDate_received(String date_received) {
         this.date_received = date_received;
     }
-    */
+
 
 }
