@@ -77,6 +77,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        session = new SessionManager(getApplicationContext());
+
         /*
         mFirebaseInstance = FirebaseDatabase.getInstance();
 
