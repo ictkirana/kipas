@@ -35,10 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     TextView textForgot;
 
-    //private DatabaseReference mFirebaseDatabase;
-    //private FirebaseDatabase mFirebaseInstance;
-    //private static final String TAG = MainActivity.class.getSimpleName();
-
     AQuery a;
     SessionManager session;
 
@@ -79,35 +75,6 @@ public class LoginActivity extends AppCompatActivity {
 
         session = new SessionManager(getApplicationContext());
 
-        /*
-        mFirebaseInstance = FirebaseDatabase.getInstance();
-
-        // get reference to 'users' node
-        mFirebaseDatabase = mFirebaseInstance.getReference("users");
-
-        // store app title to 'app_title' node
-        mFirebaseInstance.getReference("app_title").setValue("Realtime Database");
-
-        // app_title change listener
-        mFirebaseInstance.getReference("app_title").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e(TAG, "App title updated");
-
-                String appTitle = dataSnapshot.getValue(String.class);
-
-                // update toolbar title
-                getSupportActionBar().setTitle(appTitle);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e(TAG, "Failed to read app title value.", error.toException());
-            }
-        });
-        */
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,56 +100,6 @@ public class LoginActivity extends AppCompatActivity {
             password.setError("Mohon isi password");
             password.requestFocus();
         }else{
-
-            /*
-            userId = mFirebaseDatabase.push().getKey();
-
-            mFirebaseDatabase.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    if(dataSnapshot != null && dataSnapshot.getValue() != null) {
-                        User user = dataSnapshot.getValue(User.class);
-                        String usernm = user.getName();
-                        String pass = user.getEmail();
-                        String usrnm = username.getText().toString();
-                        String pwd = password.getText().toString();
-                        //Toast.makeText(getApplicationContext(),usernm,Toast.LENGTH_LONG).show();
-                        //Toast.makeText(getApplicationContext(),pass,Toast.LENGTH_LONG).show();
-                        //Toast.makeText(getApplicationContext(),usrnm,Toast.LENGTH_LONG).show();
-                        //Toast.makeText(getApplicationContext(),pwd,Toast.LENGTH_LONG).show();
-                        //if (usernm == usrnm && pass == pwd){
-                            try {
-                                session.createSession(username.getText().toString());
-                            }catch (NullPointerException n){
-
-                            }
-                            startActivity(new Intent(getApplicationContext(),Main2Activity.class));
-                            finish();
-                        //}
-                    }
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-            */
 
             a = new AQuery(LoginActivity.this);
             //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_login";

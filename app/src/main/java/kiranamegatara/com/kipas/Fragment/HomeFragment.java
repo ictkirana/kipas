@@ -33,12 +33,15 @@ import java.util.StringTokenizer;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import kiranamegatara.com.kipas.Activity.LoginActivity;
 import kiranamegatara.com.kipas.Activity.Main2Activity;
 import kiranamegatara.com.kipas.Controller.BaseApp;
 import kiranamegatara.com.kipas.Controller.ExpendableListAdapter;
 import kiranamegatara.com.kipas.Controller.RealmHelper;
 import kiranamegatara.com.kipas.Controller.SessionManager;
+import kiranamegatara.com.kipas.Model.LoginUser;
+import kiranamegatara.com.kipas.Model.SrtJalan;
 import kiranamegatara.com.kipas.Model.SrtJalanModel;
 import kiranamegatara.com.kipas.Model.SuratJalanModel;
 import kiranamegatara.com.kipas.R;
@@ -66,6 +69,7 @@ public class HomeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private View view;
     AQuery aQuery;
+    Realm realm,getRealm;
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -110,36 +114,46 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        /*
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_history, container, false);
-        final ExpandableListView expList = (ExpandableListView)view.findViewById(R.id.expSrtJalan);
+        view =  inflater.inflate(R.layout.fragment_outstanding, container, false);
+        expListView = (ExpandableListView)view.findViewById(R.id.lvExpOut);
+
         // preparing list data
         //prepareListData();
 
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
-        realmHelper = new RealmHelper(getContext());
+        //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_outs_sj";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj";
 
-        aQuery = new AQuery(getContext());
-        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_outs_sj";
 
-        session = new SessionManager(getContext());
+        session = new SessionManager(getContext().getApplicationContext());
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
         String plant = user.get(SessionManager.keyPlant);
 
         HashMap<String,String> params = new HashMap<String, String>();
-        final String pabrik = "DWJ1";
-        params.put("plant_code",pabrik);
-        Log.d("pabrik",pabrik);
+
+        /*
+        RealmResults<LoginUser> users = realm.where(LoginUser.class).findAll();
+        String pabrik = "";
+        for (int i = 0; i < users.size();i++){
+            pabrik = users.get(i).getPlant();
+        }
+        */
+        getRealm = Realm.getDefaultInstance();
+
+        params.put("plant_code",plant);
+        //Log.d("pabrik dari realm",pabrik);
+        Log.d("plant dr session",""+plant);
 
         ProgressDialog progress = new ProgressDialog(getContext());
         progress.setMessage("unduh data...");
         progress.setCancelable(false);
         progress.setIndeterminate(false);
 
+        aQuery = new AQuery(getContext());
         aQuery.progress(progress).ajax(url,params,String.class, new AjaxCallback<String>(){
             @Override
             public void callback(String url, String object, AjaxStatus status) {
@@ -158,11 +172,45 @@ public class HomeFragment extends Fragment {
                             Log.d("pesan",pesan);
                             for (int i = 0; i < jsonarray.length(); i++){
                                 JSONObject b = jsonarray.getJSONObject(i);
-                                String nosurat =b.getString("srt_jln_no");
-                                String plant = b.getString("plant_code");
-                                Log.d("plant_code",plant);
-                                Log.d("srt_jnl_no",nosurat);
-                                realmHelper.addBarcode(nosurat,plant);
+                                final String nosurat =b.getString("srt_jln_no");
+                                final String plant = b.getString("plant_code");
+                                final String gudang = b.getString("warehouse_code");
+                                final String fullname = b.getString("user_full_name");
+                                final String is_scaned = b.getString("is_scaned");
+                                final String date_scaned = b.getString("date_scaned");
+                                final String date_received = b.getString("date_received");
+                                final String date_sent = b.getString("date_sent");
+                                final String polisi_no = b.getString("polisi_no");
+                                //realmHelper.addBarcode(nosurat,plant,gudang,fullname,is_scaned,date_scaned,date_received);
+                                //realmHelper.addBarcode(nosurat,plant);
+
+                                //realm.beginTransaction();
+                                /*
+                                getRealm.executeTransaction(new Realm.Transaction(){
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        SrtJalan srtJalan = getRealm.createObject(SrtJalan.class);
+                                        srtJalan.setNosurat(nosurat);
+                                        srtJalan.setPlant(plant);
+                                        srtJalan.setGudang(gudang);
+                                        srtJalan.setFullname(fullname);
+                                        srtJalan.setIs_scaned(is_scaned);
+                                        srtJalan.setDate_scaned(date_scaned);
+                                        srtJalan.setDate_received(date_received);
+                                        srtJalan.setDate_sent(date_sent);
+                                        srtJalan.setPolisi_no(polisi_no);
+                                    }
+                                });
+                                */
+                                //realm.commitTransaction();
+
+                                listDataHeader.add(nosurat);
+                                List<String> detail = new ArrayList<String>();
+                                detail.add("Plant: "+plant);
+                                detail.add("Gudang: "+gudang);
+                                detail.add("Tanggal Kirim: "+date_sent);
+                                detail.add("No Polisi: "+polisi_no);
+                                listDataChild.put(listDataHeader.get(i),detail);
                             }
                         }
                     }catch (JSONException e){
@@ -172,40 +220,28 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        data = new ArrayList<>();
-        try {
-            data = realmHelper.findAll();
-        }catch (Exception e){
+        /*
+        RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class).findAll();
+        Log.d("isi realm",""+realmResults.size());
+        for (int i = 0; i < realmResults.size(); i++){
+            listDataHeader.add(realmResults.get(i).getNosurat());
+            List<String> detail = new ArrayList<String>();
+            detail.add("Plant: "+realmResults.get(i).getPlant());
+            detail.add("Gudang: "+realmResults.get(i).getGudang());
+            detail.add("Tanggal Kirim: "+realmResults.get(i).getDate_sent());
+            detail.add("No Polisi: "+realmResults.get(i).getPolisi_no());
+            listDataChild.put(listDataHeader.get(i), detail);
+        }
 
-        }
-        String plnt = "";
-        List<String> detail = new ArrayList<String>();
-        listDataHeader.add(pabrik);
-        int jumlah = listDataHeader.size();
-        int jumlah3 = data.size();
-        Log.d("jumlah" , jumlah + " " + jumlah3);
-        for (int i = 0;i < data.size(); i++){
-            //if (data.get(i).getPlant() == plnt){
-            detail.add(data.get(i).getNosurat());
-            listDataChild.put(listDataHeader.get(i),detail);
-            //}else{
-            //    plnt = data.get(i).getPlant();
-            //    listDataHeader.add(data.get(i).getPlant());
-            //}
-        }
-        int jumlah2 = listDataChild.size();
-        Log.d("jumlah" , jumlah + " " + jumlah2 + " " + jumlah3);
+        realmResults = getRealm.where(SrtJalan.class).findAll();
+        getRealm.beginTransaction();
+        realmResults.clear();
+        getRealm.commitTransaction();
+        */
         listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
 
         // setting list adapter
-        //expList.setAdapter(listAdapter);
-
-        try {
-            realmHelper.deleteRealm();
-        }catch (Exception e){
-
-        }
-*/
+        expListView.setAdapter(listAdapter);
         return view;
     }
 

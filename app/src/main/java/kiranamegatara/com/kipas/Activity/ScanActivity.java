@@ -129,28 +129,6 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                 }
             }
         });
-
-        /*
-        Intent intent = new Intent(ScanActivity.this,ScanResultActivity.class);
-        intent.putExtra("surat_jalan_no",barcode);
-        intent.putExtra("plant", plant);
-        startActivity(intent);
-        */
-
-        /*
-        realmHelper = new RealmHelper(BarcodeScanner.this);
-
-        btnSimpan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String number = txtBarcode.getText().toString();
-                Toast.makeText(getApplicationContext(),number,Toast.LENGTH_LONG).show();
-                realmHelper.addBarcode(number);
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-        */
     }
 
     private void QrScanner() {

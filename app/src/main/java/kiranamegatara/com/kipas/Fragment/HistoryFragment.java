@@ -271,6 +271,7 @@ public class HistoryFragment extends Fragment {
                                 final String polisi_no = b.getString("polisi_no");
                                 //realmHelper.addBarcode(nosurat,plant,gudang,fullname,is_scaned,date_scaned,date_received);
                                 Log.d("is scaned history",i + ": "+ b.getString("is_scaned"));
+                                /*
                                 getRealm.executeTransaction(new Realm.Transaction(){
                                     @Override
                                     public void execute(Realm realm) {
@@ -287,7 +288,7 @@ public class HistoryFragment extends Fragment {
                                     }
                                 });
 
-
+                                */
                                 listDataHeader.add(nosurat);
                                 List<String> detail = new ArrayList<String>();
                                 detail.add("Plant: "+plant);
@@ -305,7 +306,7 @@ public class HistoryFragment extends Fragment {
                 }
             }
         });
-
+        /*
         realmResults = getRealm.where(SrtJalan.class).findAll();
         Log.d("isi realm",""+realmResults.size());
         for (int i = 0; i < realmResults.size(); i++){
@@ -319,6 +320,7 @@ public class HistoryFragment extends Fragment {
             detail.add("Tanggal Scan: "+ realmResults.get(i).getDate_scaned());
             listDataChild.put(listDataHeader.get(i), detail);
         }
+        */
         /*
         for (int i = 0; i < data.size(); i++){
             String scan = data.get(i).getIs_scaned();
@@ -336,6 +338,7 @@ public class HistoryFragment extends Fragment {
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
+
 
 
         return view;

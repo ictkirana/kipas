@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import java.util.HashMap;
 
 import kiranamegatara.com.kipas.Activity.LoginActivity;
+import kiranamegatara.com.kipas.Activity.Main2Activity;
 import kiranamegatara.com.kipas.Activity.MainActivity;
 
 /**
@@ -52,7 +53,7 @@ public class SessionManager {
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             c.startActivity(i);
         }else{
-            Intent i = new Intent(c,MainActivity.class);
+            Intent i = new Intent(c,Main2Activity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             c.startActivity(i);
