@@ -3,14 +3,15 @@ package kiranamegatara.com.kipas.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.database.IgnoreExtraProperties;
+//import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Date;
 
 /**
  * Created by vemfiska on 17/10/16.
  */
-@IgnoreExtraProperties
+
+//@IgnoreExtraProperties
 public class User{
     public String getId() {
         return id;

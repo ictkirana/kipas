@@ -123,6 +123,8 @@ public class HomeFragment extends Fragment {
 
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
+        listDataHeader.clear();
+        listDataChild.clear();
 
         //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_outs_sj";
         String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj";
