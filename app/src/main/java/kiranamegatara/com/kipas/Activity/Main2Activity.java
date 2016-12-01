@@ -3,6 +3,7 @@ package kiranamegatara.com.kipas.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.net.ParseException;
@@ -12,6 +13,7 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -43,12 +45,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import kiranamegatara.com.kipas.Fragment.HistoryFragment;
 import kiranamegatara.com.kipas.Fragment.HomeFragment;
 import kiranamegatara.com.kipas.Fragment.Outstanding;
+import kiranamegatara.com.kipas.Model.LoginUser;
+import kiranamegatara.com.kipas.Model.SrtJalan;
+import kiranamegatara.com.kipas.Model.SuratJalan;
 import kiranamegatara.com.kipas.Model.User;
 import kiranamegatara.com.kipas.Other.CircleTransform;
 import kiranamegatara.com.kipas.R;
@@ -66,8 +74,6 @@ public class Main2Activity extends AppCompatActivity
     private FloatingActionButton fab;
     private SessionManager session;
     private User user;
-
-    AQuery a;
     final ArrayList<HashMap<String,String>> data = new ArrayList<HashMap<String, String>>();
 
     private Timer timer;
@@ -98,6 +104,8 @@ public class Main2Activity extends AppCompatActivity
             plant_name,company_name,authorized_warehouse,is_active,is_kirana,
             is_reset,fail_counter,date_last_login,date_created,date_updated,
             is_deleted,dateCrt,dateUpd;
+    Realm getRealm,realm,realmclear;
+    AQuery aQuery,a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +145,7 @@ public class Main2Activity extends AppCompatActivity
 
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
+        aQuery = new AQuery(getApplicationContext());
 
         //mail = user.get(SessionManager.keyEmail);
         //plant = user.get(SessionManager.keyPlant);
@@ -176,10 +185,192 @@ public class Main2Activity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        loadSuratJalan();
+
 
 //        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
 
+    }
+
+    private void loadSuratJalan() {
+        realmclear = Realm.getDefaultInstance();
+        RealmResults<SrtJalan> resultSrtJalan;
+        RealmResults<SuratJalan> history;
+        try {
+            resultSrtJalan = realmclear.where(SrtJalan.class).findAll();
+            realmclear.beginTransaction();
+            resultSrtJalan.clear();
+            realmclear.commitTransaction();
+            history = realmclear.where(SuratJalan.class).findAll();
+            realmclear.beginTransaction();
+            history.clear();
+            realmclear.commitTransaction();
+        }catch (Exception e){
+
+        }
+        loadHistory();
+        loadOutstanding();
+    }
+
+    private void loadHistory() {
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_his_sj";
+
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+        String plant = user.get(SessionManager.keyPlant);
+
+        HashMap<String,String> params = new HashMap<String, String>();
+        getRealm = Realm.getDefaultInstance();
+        params.put("plant_code",plant);
+        Log.d("plant dr session",""+plant);
+
+        ProgressDialog progress = new ProgressDialog(getApplicationContext());
+        progress.setMessage("unduh data...");
+        progress.setCancelable(false);
+        progress.setIndeterminate(false);
+
+        aQuery.progress(progress).ajax(url,params,String.class, new AjaxCallback<String>(){
+            @Override
+            public void callback(String url, String object, AjaxStatus status) {
+                if (object != null){
+                    try {
+                        JSONObject jsonObject = new JSONObject(object);
+                        String hasil = jsonObject.getString("result");
+                        String pesan = jsonObject.getString("msg");
+                        Log.d("surat_jalan","hasil " + hasil);
+
+                        if (hasil.equalsIgnoreCase("true")){
+                            JSONArray jsonarray = jsonObject.getJSONArray("data");
+                            int length = jsonarray.length();
+                            Log.d("jumlah surat jalan", "" + length);
+                            Log.d("pesan",pesan);
+                            for (int i = 0; i < jsonarray.length(); i++){
+                                JSONObject b = jsonarray.getJSONObject(i);
+                                final String nosurat =b.getString("srt_jln_no");
+                                final String plant = b.getString("plant_code");
+                                final String gudang = b.getString("warehouse_code");
+                                final String fullname = b.getString("user_full_name");
+                                final String is_scaned = b.getString("is_scaned");
+                                final String date_scaned = b.getString("date_scaned");
+                                final String date_received = b.getString("date_received");
+                                final String date_sent = b.getString("date_sent");
+                                final String polisi_no = b.getString("polisi_no");
+                                Log.d("surat jalan",nosurat);
+                                /*
+                                getRealm.executeTransaction(new Realm.Transaction(){
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        SuratJalan srtJalan = getRealm.createObject(SuratJalan.class);
+                                        srtJalan.setNosurat(nosurat);
+                                        srtJalan.setPlant(plant);
+                                        srtJalan.setGudang(gudang);
+                                        srtJalan.setFullname(fullname);
+                                        srtJalan.setIs_scaned(is_scaned);
+                                        srtJalan.setDate_scaned(date_scaned);
+                                        srtJalan.setDate_received(date_received);
+                                        srtJalan.setDate_sent(date_sent);
+                                        srtJalan.setPolisi_no(polisi_no);
+                                        Log.d("masuk execute","success");
+                                    }
+                                }, new Realm.Transaction.Callback(){
+                                    @Override
+                                    public void onSuccess() {
+                                        Log.d("after save"," "+ getRealm.allObjects(SuratJalan.class).size());
+                                        super.onSuccess();
+                                    }
+                                });
+                                */
+                                getRealm.beginTransaction();
+                                SuratJalan srtJalan = getRealm.createObject(SuratJalan.class);
+                                srtJalan.setNosurat(nosurat);
+                                srtJalan.setPlant(plant);
+                                srtJalan.setGudang(gudang);
+                                srtJalan.setFullname(fullname);
+                                srtJalan.setIs_scaned(is_scaned);
+                                srtJalan.setDate_scaned(date_scaned);
+                                srtJalan.setDate_received(date_received);
+                                srtJalan.setDate_sent(date_sent);
+                                srtJalan.setPolisi_no(polisi_no);
+                                getRealm.copyFromRealm(srtJalan);
+                                getRealm.commitTransaction();
+                            }
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void loadOutstanding() {
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj";
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+        String plant = user.get(SessionManager.keyPlant);
+
+        HashMap<String,String> params = new HashMap<String, String>();
+        realm = Realm.getDefaultInstance();
+        params.put("plant_code",plant);
+
+        ProgressDialog progress = new ProgressDialog(getApplicationContext());
+        progress.setMessage("unduh data...");
+        progress.setCancelable(false);
+        progress.setIndeterminate(false);
+
+        aQuery.progress(progress).ajax(url,params,String.class, new AjaxCallback<String>(){
+            @Override
+            public void callback(String url, String object, AjaxStatus status) {
+                if (object != null){
+                    try {
+                        JSONObject jsonObject = new JSONObject(object);
+                        String hasil = jsonObject.getString("result");
+                        String pesan = jsonObject.getString("msg");
+                        Log.d("surat_jalan","hasil " + hasil);
+
+                        if (hasil.equalsIgnoreCase("true")){
+                            JSONArray jsonarray = jsonObject.getJSONArray("data");
+                            int length = jsonarray.length();
+                            Log.d("jumlah surat jalan", "" + length);
+                            Log.d("pesan",pesan);
+                            for (int i = 0; i < jsonarray.length(); i++){
+                                JSONObject b = jsonarray.getJSONObject(i);
+                                final String nosurat =b.getString("srt_jln_no");
+                                final String plant = b.getString("plant_code");
+                                final String gudang = b.getString("warehouse_code");
+                                final String fullname = b.getString("user_full_name");
+                                final String is_scaned = b.getString("is_scaned");
+                                final String date_scaned = b.getString("date_scaned");
+                                final String date_received = b.getString("date_received");
+                                final String date_sent = b.getString("date_sent");
+                                final String polisi_no = b.getString("polisi_no");
+
+                                realm.executeTransaction(new Realm.Transaction(){
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        SrtJalan srtJalan = realm.createObject(SrtJalan.class);
+                                        srtJalan.setNosurat(nosurat);
+                                        srtJalan.setPlant(plant);
+                                        srtJalan.setGudang(gudang);
+                                        srtJalan.setFullname(fullname);
+                                        srtJalan.setIs_scaned(is_scaned);
+                                        srtJalan.setDate_scaned(date_scaned);
+                                        srtJalan.setDate_received(date_received);
+                                        srtJalan.setDate_sent(date_sent);
+                                        srtJalan.setPolisi_no(polisi_no);
+                                    }
+                                });
+                            }
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
 
@@ -330,9 +521,42 @@ public class Main2Activity extends AppCompatActivity
                 return historyFragment;
             case 3:
                 //logout
-                Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
-                session.logout();
-                finish();
+                //Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
+                //session.logout();
+                //finish();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Apakah anda yakin akan keluar?")
+                        .setCancelable(false)
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                session.logout();
+                                RealmResults<SrtJalan> srtJalen = realm.where(SrtJalan.class).findAll();
+                                realm.beginTransaction();
+                                srtJalen.clear();
+                                realm.commitTransaction();
+                                RealmResults<SuratJalan> history = getRealm.where(SuratJalan.class).findAll();
+                                getRealm.beginTransaction();
+                                history.clear();
+                                getRealm.commitTransaction();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                if (navItemIndex != 0) {
+                                    navItemIndex = 0;
+                                    CURRENT_TAG = TAG_HOME;
+                                    loadHomeFragment();
+                                }
+                            }
+                        });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.setTitle("Logout!");
+                alertDialog.show();
+
             default:
                 return new HomeFragment();
         }
@@ -371,11 +595,12 @@ public class Main2Activity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        /*
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
             finish();
         }
-
+        */
         // This code loads home fragment when back key is pressed
         // when user is in other fragment than home
         if (shouldLoadHomeFragOnBackPress) {
@@ -385,11 +610,14 @@ public class Main2Activity extends AppCompatActivity
                 navItemIndex = 0;
                 CURRENT_TAG = TAG_HOME;
                 loadHomeFragment();
-                finish();
+                //finish();
+            }else if(navItemIndex == 0){
+                //finish();
+                System.exit(0);
             }
         }
 
-        //super.onBackPressed();
+        super.onBackPressed();
     }
 
     @Override

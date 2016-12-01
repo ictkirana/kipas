@@ -208,7 +208,8 @@ public class Outstanding extends Fragment {
 
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
-
+        getRealm = Realm.getDefaultInstance();
+/*
         //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_outs_sj";
         String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj";
 
@@ -267,6 +268,7 @@ public class Outstanding extends Fragment {
                                 //realmHelper.addBarcode(nosurat,plant);
 
                                 //realm.beginTransaction();
+
                                 getRealm.executeTransaction(new Realm.Transaction(){
                                     @Override
                                     public void execute(Realm realm) {
@@ -282,6 +284,7 @@ public class Outstanding extends Fragment {
                                         srtJalan.setPolisi_no(polisi_no);
                                     }
                                 });
+
                                 //realm.commitTransaction();
 
                                 listDataHeader.add(nosurat);
@@ -299,8 +302,11 @@ public class Outstanding extends Fragment {
                 }
             }
         });
+*/
 
-        RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class).findAll();
+        RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class)
+                                                .equalTo("date_scaned","0000-00-00 00:00:00")
+                                                .findAll();
         Log.d("isi realm",""+realmResults.size());
         for (int i = 0; i < realmResults.size(); i++){
             listDataHeader.add(realmResults.get(i).getNosurat());
@@ -311,6 +317,7 @@ public class Outstanding extends Fragment {
             detail.add("No Polisi: "+realmResults.get(i).getPolisi_no());
             listDataChild.put(listDataHeader.get(i), detail);
         }
+
         /*
         try {
             data = realmHelper.findAll();
@@ -329,11 +336,12 @@ public class Outstanding extends Fragment {
         }
         */
 
+        /*
         realmResults = getRealm.where(SrtJalan.class).findAll();
         getRealm.beginTransaction();
         realmResults.clear();
         getRealm.commitTransaction();
-
+        */
         listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
 
         // setting list adapter

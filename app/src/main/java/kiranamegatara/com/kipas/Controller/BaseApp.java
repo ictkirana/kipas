@@ -11,6 +11,7 @@ import io.realm.RealmSchema;
 import io.realm.annotations.RealmModule;
 import kiranamegatara.com.kipas.Model.LoginUser;
 import kiranamegatara.com.kipas.Model.SrtJalan;
+import kiranamegatara.com.kipas.Model.SuratJalan;
 
 /**
  * Created by vemfiska on 12/10/16.
@@ -36,7 +37,7 @@ public class BaseApp extends Application{
 
     }
 
-    @RealmModule(classes = {SrtJalan.class, LoginUser.class})
+    @RealmModule(classes = {SrtJalan.class, LoginUser.class, SuratJalan.class})
     public class MyRealmModule{}
 
     private class DataMigration implements RealmMigration {

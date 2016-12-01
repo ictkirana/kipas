@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <application
         android:name=".Controller.BaseApp"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_kipas"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

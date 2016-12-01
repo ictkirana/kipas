@@ -121,6 +121,7 @@ public class HomeFragment extends Fragment {
         // preparing list data
         //prepareListData();
 
+        /*
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
         listDataHeader.clear();
@@ -137,13 +138,6 @@ public class HomeFragment extends Fragment {
 
         HashMap<String,String> params = new HashMap<String, String>();
 
-        /*
-        RealmResults<LoginUser> users = realm.where(LoginUser.class).findAll();
-        String pabrik = "";
-        for (int i = 0; i < users.size();i++){
-            pabrik = users.get(i).getPlant();
-        }
-        */
         getRealm = Realm.getDefaultInstance();
 
         params.put("plant_code",plant);
@@ -203,7 +197,7 @@ public class HomeFragment extends Fragment {
                                         srtJalan.setPolisi_no(polisi_no);
                                     }
                                 });
-                                */
+
                                 //realm.commitTransaction();
 
                                 listDataHeader.add(nosurat);
@@ -239,11 +233,13 @@ public class HomeFragment extends Fragment {
         getRealm.beginTransaction();
         realmResults.clear();
         getRealm.commitTransaction();
-        */
+
         listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
+
+        */
         return view;
     }
 

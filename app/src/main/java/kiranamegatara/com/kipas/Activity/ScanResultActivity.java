@@ -27,8 +27,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+import kiranamegatara.com.kipas.Model.SrtJalan;
+import kiranamegatara.com.kipas.Model.SuratJalan;
 import kiranamegatara.com.kipas.R;
 import kiranamegatara.com.kipas.Controller.RealmHelper;
 
@@ -42,7 +47,8 @@ public class ScanResultActivity extends AppCompatActivity {
 
     RealmHelper realmHelper;
 
-    String nosurat,tanggalKirim,pabrik,polisi_no,fullname,nik,gudang;
+    String nosurat,tanggalKirim,pabrik,polisi_no,fullname,nik,gudang,date_scaned,getTanggalKirim;
+    Realm realm,getRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +73,17 @@ public class ScanResultActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         nosurat = intent.getStringExtra("surat_jalan_no");
-        tanggalKirim = intent.getStringExtra("tglKirim");
+        getTanggalKirim = intent.getStringExtra("tglKirim");
+       // tanggalKirim = getTanggalKirim.substring(0,10);
+        tanggalKirim = "2016-11-22";
+        Log.d("tanggal kirim", tanggalKirim);
         pabrik = intent.getStringExtra("plant");
         polisi_no = intent.getStringExtra("polisi_no");
         email = intent.getStringExtra("email_user");
         fullname = intent.getStringExtra("fullname");
         nik = intent.getStringExtra("nik");
         gudang = intent.getStringExtra("gudang");
+        date_scaned = intent.getStringExtra("date_scaned");
 
         number.setText(nosurat);
         plant.setText(pabrik);
@@ -93,6 +103,18 @@ public class ScanResultActivity extends AppCompatActivity {
                 //realmHelper = new RealmHelper(ScanResultActivity.this);
                 //realmHelper.addBarcode(nosurat,pabrik,vndr);
                 SaveSuratJalan();
+
+                realm = Realm.getDefaultInstance();
+                getRealm = Realm.getDefaultInstance();
+
+                RealmResults<SrtJalan> srtJalen = realm.where(SrtJalan.class).findAll();
+                realm.beginTransaction();
+                srtJalen.clear();
+                realm.commitTransaction();
+                RealmResults<SuratJalan> history = getRealm.where(SuratJalan.class).findAll();
+                getRealm.beginTransaction();
+                history.clear();
+                getRealm.commitTransaction();
                 Intent intent1 = new Intent(ScanResultActivity.this,Main2Activity.class);
                 startActivity(intent1);
             }
@@ -176,14 +198,32 @@ public class ScanResultActivity extends AppCompatActivity {
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        if (id == 999){
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this,myDateListener, year, month,day);
+        String tahun,bulan,hari;
+        int thn,bln,hri;
+        if (id == 999) {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, year, month, day);
             datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-            if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
-                calendar.add(Calendar.DAY_OF_MONTH, -3);
-            }else {
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
-            }
+            Log.d("date scaned",""+ date_scaned);
+            //if (date_scaned.equalsIgnoreCase("0000-00-00 00:00:00") ) {
+            //    tahun = tanggalKirim.substring(0,4);
+            //    bulan = tanggalKirim.substring(5,7);
+            //    hari = tanggalKirim.substring(8,10);
+            //    Log.d("tahun",tahun);
+            //    Log.d("bulan",bulan);
+            //    Log.d("hari",hari);
+            //    thn = Integer.parseInt(tahun);
+            //    bln = Integer.parseInt(bulan);
+            //    hri = Integer.parseInt(hari);
+            //    Log.d("tanggal",""+ thn +"-"+bln+"-"+hri);
+            //    calendar.set(thn,bln,hri);
+            //    calendar.isWeekDateSupported();
+            //} else {
+                if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+                    calendar.add(Calendar.DAY_OF_MONTH, -3);
+                } else {
+                    calendar.add(Calendar.DAY_OF_MONTH, -1);
+                }
+            //}
             datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
             return datePickerDialog;
         }

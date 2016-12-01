@@ -9,54 +9,67 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".Activity.LoginActivity">
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/linearLayout">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linlayimage">
 
         <ImageView
+            android:layout_width="201dp"
+            android:layout_height="43dp"
+            android:id="@+id/imageView2"
+            android:src="@drawable/logohorizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="90dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="166dp"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linlayimage">
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/inputUser"
+                android:hint="Username"
+                android:drawableRight="@drawable/ic_person_black_24dp"
+                app:met_baseColor="@color/colorAccent"
+                app:met_textColor="@color/colorPrimary"
+                app:met_errorColor="#b70000"/>
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/inputPass"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:drawableRight="@drawable/ic_build_black_24dp"
+                app:met_baseColor="@color/colorAccent"
+                app:met_textColor="@color/colorPrimary"
+                app:met_errorColor="#b70000"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnLogin"
+                android:text="Login"/>
+        </LinearLayout>
+
+        <TextView
+            android:text="Forgot Password?"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView2"
-            android:src="@drawable/logo2"
-            android:layout_alignTop="@+id/linearLayout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="25dp" />
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/inputUser"
-            android:hint="Username"
-            android:drawableRight="@drawable/ic_person_black_24dp"
-            app:met_baseColor="@color/colorAccent"
-            app:met_textColor="@color/colorPrimary"
-            app:met_errorColor="#b70000"/>
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/inputPass"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:drawableRight="@drawable/ic_build_black_24dp"
-            app:met_baseColor="@color/colorAccent"
-            app:met_textColor="@color/colorPrimary"
-            app:met_errorColor="#b70000"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnLogin"
-            android:text="Login"/>
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="12dp"
+            android:id="@+id/txtForgot" />
+
     </LinearLayout>
 
-    <TextView
-        android:text="Forgot Password?"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="12dp"
-        android:id="@+id/txtForgot" />
 
 </RelativeLayout>

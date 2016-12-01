@@ -30,7 +30,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     ZXingScannerView mScannerView;
     RealmHelper realmHelper;
     AQuery a;
-    String email,plant,nopol,fullname, nik,gudang;
+    String email,plant,nopol,fullname, nik,gudang,date_scaned;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +101,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                                     plant = b.getString("plant_code");
                                     tglKirim[0] = b.getString("date_sent");
                                     nopol = b.getString("polisi_no");
+                                    date_scaned = b.getString("date_scaned");
+
                                 }
                             }
 
@@ -113,6 +115,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             intent.putExtra("fullname",fullname);
                             intent.putExtra("nik",nik);
                             intent.putExtra("gudang",gudang);
+                            intent.putExtra("date_scaned",date_scaned);
                             startActivity(intent);
                         }else {
                             /*

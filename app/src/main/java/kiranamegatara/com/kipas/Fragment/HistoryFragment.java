@@ -31,6 +31,7 @@ import kiranamegatara.com.kipas.Controller.ExpendableListAdapter;
 import kiranamegatara.com.kipas.Model.LoginUser;
 import kiranamegatara.com.kipas.Model.SrtJalan;
 import kiranamegatara.com.kipas.Model.SrtJalanModel;
+import kiranamegatara.com.kipas.Model.SuratJalan;
 import kiranamegatara.com.kipas.R;
 import kiranamegatara.com.kipas.Controller.RealmHelper;
 import kiranamegatara.com.kipas.Controller.SessionManager;
@@ -102,7 +103,7 @@ public class HistoryFragment extends Fragment {
 
         session = new SessionManager(getContext().getApplicationContext());
 
-        realm = Realm.getDefaultInstance();
+        //realm = Realm.getDefaultInstance();
         //realmHelper = new RealmHelper(getContext());
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
@@ -128,17 +129,17 @@ public class HistoryFragment extends Fragment {
         String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_his_sj";
         //realmHelper = new RealmHelper(getContext());
 
-        session = new SessionManager(getContext());
+        session = new SessionManager(getContext().getApplicationContext());
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
-        //String plant = user.get(SessionManager.keyPlant);
-        String plant = "DWJ1";
+        String plant1 = user.get(SessionManager.keyPlant);
+        //String plant = "DWJ1";
 
         Log.d("plant dari session",""+ pabrik);
        // Log.d("plant dari realm",""+ pabrik);
 
         HashMap<String,String> params = new HashMap<String, String>();
-        params.put("plant_code",plant);
+        params.put("plant_code",plant1);
 
         ProgressDialog progress = new ProgressDialog(getContext());
         progress.setMessage("unduh data...");
@@ -206,37 +207,35 @@ public class HistoryFragment extends Fragment {
         view =  inflater.inflate(R.layout.fragment_history, container, false);
         expListView = (ExpandableListView)view.findViewById(R.id.lvExp);
 
-        RealmResults<SrtJalan> realmResults;
-        realmResults = realm.where(SrtJalan.class).findAll();
-        realm.beginTransaction();
-        realmResults.clear();
-        realm.commitTransaction();
 
         // preparing list data
         //prepareListData();
 
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
-        listDataHeader.clear();
-        listDataChild.clear();
+
 
         //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_his_sj";
         String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_his_sj";
+        getRealm = Realm.getDefaultInstance();
+/*
+        session = new SessionManager(getContext().getApplicationContext());
 
-        session = new SessionManager(getContext());
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
+        String pabriksesi = "";
+        pabriksesi = user.get(SessionManager.keyPlant);
+
         RealmResults<LoginUser> users = realm.where(LoginUser.class).findAll();
-        String pabrik = "";
         for (int i = 0; i < users.size();i++){
-            pabrik = users.get(i).getPlant();
+            pabriksesi = users.get(i).getPlant();
         }
         getRealm = Realm.getDefaultInstance();
 
-        Log.d("plant dari realm",""+ pabrik);
+        Log.d("plant dari sesi",""+ pabriksesi);
 
         HashMap<String,String> params = new HashMap<String, String>();
-        params.put("plant_code",pabrik);
+        params.put("plant_code",pabriksesi);
 
         ProgressDialog progress = new ProgressDialog(getContext());
         progress.setMessage("unduh data...");
@@ -272,8 +271,8 @@ public class HistoryFragment extends Fragment {
                                 final String date_sent = b.getString("date_sent");
                                 final String polisi_no = b.getString("polisi_no");
                                 //realmHelper.addBarcode(nosurat,plant,gudang,fullname,is_scaned,date_scaned,date_received);
-                                Log.d("is scaned history",i + ": "+ b.getString("is_scaned"));
-                                /*
+                                Log.d("is scaned history",i + ": "+ b.getString("is_scaned")+ nosurat);
+
                                 getRealm.executeTransaction(new Realm.Transaction(){
                                     @Override
                                     public void execute(Realm realm) {
@@ -290,7 +289,7 @@ public class HistoryFragment extends Fragment {
                                     }
                                 });
 
-                                */
+                                /*
                                 listDataHeader.add(nosurat);
                                 List<String> detail = new ArrayList<String>();
                                 detail.add("Plant: "+plant);
@@ -299,7 +298,14 @@ public class HistoryFragment extends Fragment {
                                 detail.add("No Polisi: "+polisi_no);
                                 detail.add("Tanggal Terima: "+ date_received);
                                 detail.add("Tanggal Scan: "+ date_scaned);
+                                Log.d("Plant: ",""+plant);
+                                Log.d("Gudang: ",""+gudang);
+                                Log.d("Tanggal Kirim: ",""+date_sent);
+                                Log.d("No Polisi: ",""+polisi_no);
+                                Log.d("Tanggal Terima: ",""+ date_received);
+                                Log.d("Tanggal Scan: ",""+ date_scaned);
                                 listDataChild.put(listDataHeader.get(i),detail);
+
                             }
                         }
                     }catch (JSONException e){
@@ -308,33 +314,26 @@ public class HistoryFragment extends Fragment {
                 }
             }
         });
-        /*
-        realmResults = getRealm.where(SrtJalan.class).findAll();
-        Log.d("isi realm",""+realmResults.size());
-        for (int i = 0; i < realmResults.size(); i++){
-            listDataHeader.add(realmResults.get(i).getNosurat());
+        */
+        RealmResults<SuratJalan> results = getRealm.where(SuratJalan.class)
+                                        //.notEqualTo("date_scaned","0000-00-00 00:00:00")
+                                        .findAll();
+        Log.d("isi realm",""+ results.size());
+        for (int i = 0; i < results.size(); i++){
+            listDataHeader.add(results.get(i).getNosurat());
+            Log.d("no surat",""+ results.get(i).getNosurat());
             List<String> detail = new ArrayList<String>();
-            detail.add("Plant: "+realmResults.get(i).getPlant());
-            detail.add("Gudang: "+realmResults.get(i).getGudang());
-            detail.add("Tanggal Kirim: "+realmResults.get(i).getDate_sent());
-            detail.add("No Polisi: "+realmResults.get(i).getPolisi_no());
-            detail.add("Tanggal Terima: "+ realmResults.get(i).getDate_received());
-            detail.add("Tanggal Scan: "+ realmResults.get(i).getDate_scaned());
+            detail.add("Plant: "+results.get(i).getPlant());
+            detail.add("Gudang: "+results.get(i).getGudang());
+            detail.add("Tanggal Kirim: "+results.get(i).getDate_sent());
+            detail.add("No Polisi: "+results.get(i).getPolisi_no());
+            detail.add("Tanggal Terima: "+ results.get(i).getDate_received());
+            detail.add("Tanggal Scan: "+ results.get(i).getDate_scaned());
             listDataChild.put(listDataHeader.get(i), detail);
         }
-        */
-        /*
-        for (int i = 0; i < data.size(); i++){
-            String scan = data.get(i).getIs_scaned();
-            if (scan == "1") {
-                listDataHeader.add(data.get(i).getNosurat());
-                List<String> detail = new ArrayList<String>();
-                detail.add(data.get(i).getPlant());
-                detail.add(data.get(i).getGudang());
-                listDataChild.put(listDataHeader.get(i), detail);
-            }
-        }
-        */
+
+        Log.d("jumlah header",":"+listDataHeader.size());
+        Log.d("jumlah detail",":"+listDataChild.size());
         listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
 
 
