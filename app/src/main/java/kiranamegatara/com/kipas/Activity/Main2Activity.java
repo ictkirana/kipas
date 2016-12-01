@@ -214,7 +214,8 @@ public class Main2Activity extends AppCompatActivity
     }
 
     private void loadHistory() {
-        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_his_sj";
+        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_his_sj";
+        //String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_his_sj";
 
 
         // get user data from session
@@ -306,7 +307,8 @@ public class Main2Activity extends AppCompatActivity
     }
 
     private void loadOutstanding() {
-        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj";
+        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_outs_sj";
+        //String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj";
 
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();

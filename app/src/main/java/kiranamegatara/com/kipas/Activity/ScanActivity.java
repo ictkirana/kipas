@@ -62,8 +62,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         Toast.makeText(getApplicationContext(),rawResult.getText().toString(),Toast.LENGTH_LONG).show();
 
         a = new AQuery(ScanActivity.this);
-        //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_sj";
-        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
+        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_sj";
+        //String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
 
 
         //final String[] plant = new String[1];
@@ -101,7 +101,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                                     plant = b.getString("plant_code");
                                     tglKirim[0] = b.getString("date_sent");
                                     nopol = b.getString("polisi_no");
-                                    date_scaned = b.getString("date_scaned");
+                                    //date_scaned = b.getString("date_scaned");
 
                                 }
                             }
@@ -115,7 +115,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             intent.putExtra("fullname",fullname);
                             intent.putExtra("nik",nik);
                             intent.putExtra("gudang",gudang);
-                            intent.putExtra("date_scaned",date_scaned);
+                            //intent.putExtra("date_scaned",date_scaned);
+                            Log.d("date_scaned",""+date_scaned);
                             startActivity(intent);
                         }else {
                             /*
