@@ -325,12 +325,19 @@ public class HistoryFragment extends Fragment {
             List<String> detail = new ArrayList<String>();
             detail.add("Plant: "+results.get(i).getPlant());
             detail.add("Gudang: "+results.get(i).getGudang());
-            detail.add("Tanggal Kirim: "+results.get(i).getDate_sent());
+            String tglKirim = results.get(i).getDate_sent();
+            detail.add("Tanggal Kirim: "+ tglKirim.substring(0,4) + "-"
+                    + tglKirim.substring(5,7) + "-"
+                    + tglKirim.substring(8,10));
             detail.add("No Polisi: "+results.get(i).getPolisi_no());
             String tglTerima = results.get(i).getDate_received();
-            detail.add("Tanggal Terima: "+ tglTerima.substring(0,10));
+            detail.add("Tanggal Terima: "+ tglTerima.substring(0,4) + "-"
+                                        + tglTerima.substring(5,7) + "-"
+                                        + tglTerima.substring(8,10));
             String tglScan = results.get(i).getDate_scaned();
-            detail.add("Tanggal Scan: "+ tglScan.substring(0,10));
+            detail.add("Tanggal Scan: "+ tglScan.substring(0,4) + "-"
+                    + tglScan.substring(5,7) + "-"
+                    + tglScan.substring(8,10));
             listDataChild.put(listDataHeader.get(i), detail);
         }
 

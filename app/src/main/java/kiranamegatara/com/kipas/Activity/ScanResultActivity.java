@@ -192,7 +192,7 @@ public class ScanResultActivity extends AppCompatActivity {
     private void showDate(int year, int i, int day) {
         //tglTerima.setText(new StringBuilder().append(year).append("-")
         //        .append(month+1).append("-").append(day));
-        tglTerima.setText(new StringBuilder().append(day).append("-").append(month - 1)
+        tglTerima.setText(new StringBuilder().append(day).append("-").append(month + 1)
                     .append("-").append(year));
     }
 

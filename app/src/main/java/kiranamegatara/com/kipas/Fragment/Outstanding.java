@@ -246,6 +246,10 @@ public class Outstanding extends Fragment {
             }
         });
 
+        session = new SessionManager(getContext().getApplicationContext());
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+        String gudang = user.get(SessionManager.keyGudang);
 
         RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class)
                                                 .equalTo("date_scaned","0000-00-00 00:00:00")
