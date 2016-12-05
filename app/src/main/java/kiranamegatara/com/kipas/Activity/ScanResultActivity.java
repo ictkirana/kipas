@@ -49,7 +49,8 @@ public class ScanResultActivity extends AppCompatActivity {
 
     RealmHelper realmHelper;
 
-    String nosurat,tanggalKirim,pabrik,polisi_no,fullname,nik,gudang,date_scaned,getTanggalKirim;
+    String nosurat,tanggalKirim,pabrik,polisi_no,fullname,
+            nik,gudang,date_scaned,getTanggalKirim,is_scaned;
     Realm realm,getRealm;
 
     @Override
@@ -85,11 +86,14 @@ public class ScanResultActivity extends AppCompatActivity {
         fullname = intent.getStringExtra("fullname");
         nik = intent.getStringExtra("nik");
         gudang = intent.getStringExtra("gudang");
-        //date_scaned = intent.getStringExtra("date_scaned");
+        is_scaned = intent.getStringExtra("is_scaned");
+        date_scaned = intent.getStringExtra("date_scaned");
 
         number.setText(nosurat);
         plant.setText(pabrik);
-        tglKirim.setText(getTanggalKirim);
+        tglKirim.setText(tanggalKirim.substring(8,10) + "-"
+                        + tanggalKirim.substring(5,7) + "-"
+                        + tanggalKirim.substring(8,10));
         nopol.setText(polisi_no);
 
         tglTerima.setOnClickListener(new View.OnClickListener() {
@@ -186,8 +190,10 @@ public class ScanResultActivity extends AppCompatActivity {
     }
 
     private void showDate(int year, int i, int day) {
-        tglTerima.setText(new StringBuilder().append(year).append("-")
-                .append(month+1).append("-").append(day));
+        //tglTerima.setText(new StringBuilder().append(year).append("-")
+        //        .append(month+1).append("-").append(day));
+        tglTerima.setText(new StringBuilder().append(day).append("-").append(month - 1)
+                    .append("-").append(year));
     }
 
 
@@ -206,28 +212,29 @@ public class ScanResultActivity extends AppCompatActivity {
         if (id == 999) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, year, month, day);
             datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-            Log.d("date scaned",""+ date_scaned);
-            //if (date_scaned.equalsIgnoreCase("0000-00-00 00:00:00") ) {
-            //    tahun = tanggalKirim.substring(0,4);
-            //    bulan = tanggalKirim.substring(5,7);
-            //    hari = tanggalKirim.substring(8,10);
-            //    Log.d("tahun",tahun);
-            //    Log.d("bulan",bulan);
-            //    Log.d("hari",hari);
-            //    thn = Integer.parseInt(tahun);
-            //    bln = Integer.parseInt(bulan);
-            //    hri = Integer.parseInt(hari);
-            //    Log.d("tanggal",""+ thn +"-"+bln+"-"+hri);
-            //    calendar.set(thn,bln,hri);
-            //    calendar.isWeekDateSupported();
-            //} else {
+            Log.d("date scaned pilih",""+ date_scaned);
+            Log.d("is scaned pilih",""+ is_scaned);
+            if (is_scaned.equalsIgnoreCase("0") ) {
+                tahun = tanggalKirim.substring(0,4);
+                bulan = tanggalKirim.substring(5,7);
+                hari = tanggalKirim.substring(8,10);
+                Log.d("tahun",tahun);
+                Log.d("bulan",bulan);
+                Log.d("hari",hari);
+                thn = Integer.parseInt(tahun);
+                bln = Integer.parseInt(bulan);
+                hri = Integer.parseInt(hari);
+                Log.d("tanggal",""+ thn +"-"+bln+"-"+hri);
+                calendar.set(thn,bln-1,hri);
+                //calendar.isWeekDateSupported();
+            } else {
                 if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
                     calendar.add(Calendar.DAY_OF_MONTH, -3);
                 } else {
                     calendar.add(Calendar.DAY_OF_MONTH, -1);
                 }
-            //}
-            //datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+            }
+            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
             return datePickerDialog;
         }
         return null;
@@ -239,4 +246,11 @@ public class ScanResultActivity extends AppCompatActivity {
             showDate(i,i1 + 1,i2);
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(),Main2Activity.class);
+        startActivity(intent);
+        super.onBackPressed();
+    }
 }
