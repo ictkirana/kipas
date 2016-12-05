@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
@@ -203,114 +205,46 @@ public class Outstanding extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_outstanding, container, false);
+        view =  inflater.inflate(R.layout.fragment_outstanding, null);
         expListView = (ExpandableListView)view.findViewById(R.id.lvExpOut);
         spn_wh= (Spinner) view.findViewById(R.id.spngudang);
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
+        getRealm = Realm.getDefaultInstance();
+
         getListGudang();
         data_array= new ArrayList<String>();
         ArrayAdapter adp_list_kota = new ArrayAdapter(this.getActivity(),android.R.layout.simple_spinner_item,data_array);
         adp_list_kota.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spn_wh.setAdapter(adp_list_kota);
-        // preparing list data
-        //prepareListData();
-
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
-        getRealm = Realm.getDefaultInstance();
-/*
-        //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_outs_sj";
-        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj";
-
-
-        session = new SessionManager(getContext().getApplicationContext());
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-        String plant = user.get(SessionManager.keyPlant);
-
-        HashMap<String,String> params = new HashMap<String, String>();
-
-        RealmResults<LoginUser> users = realm.where(LoginUser.class).findAll();
-        String pabrik = "";
-        for (int i = 0; i < users.size();i++){
-            pabrik = users.get(i).getPlant();
-        }
-        getRealm = Realm.getDefaultInstance();
-
-        params.put("plant_code",pabrik);
-        Log.d("pabrik dari realm",pabrik);
-        Log.d("plant dr session",""+plant);
-
-        ProgressDialog progress = new ProgressDialog(getContext());
-        progress.setMessage("unduh data...");
-        progress.setCancelable(false);
-        progress.setIndeterminate(false);
-
-        aQuery.progress(progress).ajax(url,params,String.class, new AjaxCallback<String>(){
+        spn_wh.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void callback(String url, String object, AjaxStatus status) {
-                if (object != null){
-                    try {
-                        JSONObject jsonObject = new JSONObject(object);
-                        String hasil = jsonObject.getString("result");
-                        String pesan = jsonObject.getString("msg");
-                        //Toast.makeText(getContext(),hasil,Toast.LENGTH_LONG).show();
-                        Log.d("surat_jalan","hasil " + hasil);
-
-                        if (hasil.equalsIgnoreCase("true")){
-                            JSONArray jsonarray = jsonObject.getJSONArray("data");
-                            int length = jsonarray.length();
-                            Log.d("jumlah surat jalan", "" + length);
-                            Log.d("pesan",pesan);
-                            for (int i = 0; i < jsonarray.length(); i++){
-                                JSONObject b = jsonarray.getJSONObject(i);
-                                final String nosurat =b.getString("srt_jln_no");
-                                final String plant = b.getString("plant_code");
-                                final String gudang = b.getString("warehouse_code");
-                                final String fullname = b.getString("user_full_name");
-                                final String is_scaned = b.getString("is_scaned");
-                                final String date_scaned = b.getString("date_scaned");
-                                final String date_received = b.getString("date_received");
-                                final String date_sent = b.getString("date_sent");
-                                final String polisi_no = b.getString("polisi_no");
-                                //realmHelper.addBarcode(nosurat,plant,gudang,fullname,is_scaned,date_scaned,date_received);
-                                //realmHelper.addBarcode(nosurat,plant);
-
-                                //realm.beginTransaction();
-
-                                getRealm.executeTransaction(new Realm.Transaction(){
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        SrtJalan srtJalan = getRealm.createObject(SrtJalan.class);
-                                        srtJalan.setNosurat(nosurat);
-                                        srtJalan.setPlant(plant);
-                                        srtJalan.setGudang(gudang);
-                                        srtJalan.setFullname(fullname);
-                                        srtJalan.setIs_scaned(is_scaned);
-                                        srtJalan.setDate_scaned(date_scaned);
-                                        srtJalan.setDate_received(date_received);
-                                        srtJalan.setDate_sent(date_sent);
-                                        srtJalan.setPolisi_no(polisi_no);
-                                    }
-                                });
-
-                                //realm.commitTransaction();
-
-                                listDataHeader.add(nosurat);
-                                List<String> detail = new ArrayList<String>();
-                                detail.add("Plant: "+plant);
-                                detail.add("Gudang: "+gudang);
-                                detail.add("Tanggal Kirim: "+date_sent);
-                                detail.add("No Polisi: "+polisi_no);
-                                listDataChild.put(listDataHeader.get(i),detail);
-                            }
-                        }
-                    }catch (JSONException e){
-                        e.printStackTrace();
-                    }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class).equalTo("gudang", data_array.get(position))
+                        .equalTo("date_scaned","0000-00-00 00:00:00")
+                        .findAll();
+                Toast.makeText(getContext(),data_array.get(position),Toast.LENGTH_LONG).show();
+                Log.d("isi realm",""+realmResults.size());
+                for (int i = 0; i < realmResults.size(); i++){
+                    listDataHeader.add(realmResults.get(i).getNosurat());
+                    List<String> detail = new ArrayList<String>();
+                    detail.add("Plant: "+realmResults.get(i).getPlant());
+                    detail.add("Gudang: "+realmResults.get(i).getGudang());
+                    detail.add("Tanggal Kirim: "+realmResults.get(i).getDate_sent());
+                    detail.add("No Polisi: "+realmResults.get(i).getPolisi_no());
+                    listDataChild.put(listDataHeader.get(i), detail);
                 }
+                listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
+                expListView.setAdapter(listAdapter);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-*/
+
 
         RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class)
                                                 .equalTo("date_scaned","0000-00-00 00:00:00")
@@ -326,35 +260,8 @@ public class Outstanding extends Fragment {
             listDataChild.put(listDataHeader.get(i), detail);
         }
 
-        /*
-        try {
-            data = realmHelper.findAll();
-        }catch (Exception e){
-
-        }
-        for (int i = 0; i < data.size(); i++){
-            String scan = data.get(i).getIs_scaned();
-            if (scan == "1") {
-                listDataHeader.add(data.get(i).getNosurat());
-                List<String> detail = new ArrayList<String>();
-                detail.add(data.get(i).getPlant());
-                detail.add(data.get(i).getGudang());
-                listDataChild.put(listDataHeader.get(i), detail);
-            }
-        }
-        */
-
-        /*
-        realmResults = getRealm.where(SrtJalan.class).findAll();
-        getRealm.beginTransaction();
-        realmResults.clear();
-        getRealm.commitTransaction();
-        */
         listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
-
-        // setting list adapter
         expListView.setAdapter(listAdapter);
-
         return view;
     }
 
