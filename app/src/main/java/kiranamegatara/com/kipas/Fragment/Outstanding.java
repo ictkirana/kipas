@@ -205,14 +205,23 @@ public class Outstanding extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
+
         view =  inflater.inflate(R.layout.fragment_outstanding, null);
         expListView = (ExpandableListView)view.findViewById(R.id.lvExpOut);
         spn_wh= (Spinner) view.findViewById(R.id.spngudang);
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
         getRealm = Realm.getDefaultInstance();
+        session = new SessionManager(getContext().getApplicationContext());
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+        String gudang[] = user.get(SessionManager.keyGudang).split(".");
+        Log.d("gudang arr",gudang.toString());
+//        getListGudang();
+        for (int i=0; i < gudang.length; i++){
+            data_array.add(gudang[i]);
+        }
 
-        getListGudang();
         data_array= new ArrayList<String>();
         ArrayAdapter adp_list_kota = new ArrayAdapter(this.getActivity(),android.R.layout.simple_spinner_item,data_array);
         adp_list_kota.setDropDownViewResource(android.R.layout.simple_spinner_item);
@@ -246,10 +255,7 @@ public class Outstanding extends Fragment {
             }
         });
 
-        session = new SessionManager(getContext().getApplicationContext());
-        // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
-        String gudang = user.get(SessionManager.keyGudang);
+
 
         RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class)
                                                 .equalTo("date_scaned","0000-00-00 00:00:00")
