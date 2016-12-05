@@ -55,7 +55,8 @@
         android:hint="Konfirmasi Password Baru"
         android:layout_gravity="center"
         app:met_baseColor="@color/colorPrimary"
-        app:met_errorColor="#ff0000" />
+        app:met_errorColor="#ff0000"
+        android:inputType="textPassword"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
