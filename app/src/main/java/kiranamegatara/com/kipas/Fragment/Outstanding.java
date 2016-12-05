@@ -266,8 +266,8 @@ public class Outstanding extends Fragment {
     }
 
     private void getListGudang() {
-        String url = "http://10.0.9.35/ci/index.php/cls_ws_sir/get_outs_sj_wh";
-//        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj_wh";
+//        String url = "http://10.0.9.35/ci/index.php/cls_ws_sir/get_outs_sj_wh";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj_wh";
 
 
         session = new SessionManager(getContext().getApplicationContext());
