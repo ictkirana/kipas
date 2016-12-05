@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import kiranamegatara.com.kipas.Controller.SessionManager;
 import kiranamegatara.com.kipas.R;
 import kiranamegatara.com.kipas.Controller.RealmHelper;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -31,15 +32,21 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     RealmHelper realmHelper;
     AQuery a;
     String email,plant,nopol,fullname, nik,gudang,date_scaned;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
+        session = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = session.getUserDetails();
+        plant = user.get(SessionManager.keyPlant);
+
+
         Intent inte = getIntent();
         email = inte.getStringExtra("email_user");
-        plant = inte.getStringExtra("plant");
+        //plant = inte.getStringExtra("plant");
         fullname = inte.getStringExtra("fullname");
         nik = inte.getStringExtra("nik");
         gudang = inte.getStringExtra("gudang");
@@ -62,8 +69,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         Toast.makeText(getApplicationContext(),rawResult.getText().toString(),Toast.LENGTH_LONG).show();
 
         a = new AQuery(ScanActivity.this);
-        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_sj";
-        //String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
+        //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_sj";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
 
 
         //final String[] plant = new String[1];

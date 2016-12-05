@@ -32,6 +32,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import kiranamegatara.com.kipas.Controller.SessionManager;
 import kiranamegatara.com.kipas.Model.SrtJalan;
 import kiranamegatara.com.kipas.Model.SuratJalan;
 import kiranamegatara.com.kipas.R;
@@ -44,6 +45,7 @@ public class ScanResultActivity extends AppCompatActivity {
     private int year, month, day;
     String email;
     AQuery a;
+    SessionManager session;
 
     RealmHelper realmHelper;
 
@@ -74,8 +76,8 @@ public class ScanResultActivity extends AppCompatActivity {
         Intent intent = getIntent();
         nosurat = intent.getStringExtra("surat_jalan_no");
         getTanggalKirim = intent.getStringExtra("tglKirim");
-       // tanggalKirim = getTanggalKirim.substring(0,10);
-        tanggalKirim = "2016-11-22";
+        tanggalKirim = getTanggalKirim.substring(0,10);
+       // tanggalKirim = "2016-11-22";
         Log.d("tanggal kirim", tanggalKirim);
         pabrik = intent.getStringExtra("plant");
         polisi_no = intent.getStringExtra("polisi_no");
@@ -131,8 +133,8 @@ public class ScanResultActivity extends AppCompatActivity {
 
     private void SaveSuratJalan() {
         a = new AQuery(ScanResultActivity.this);
-        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/scan_sj";
-        //String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/scan_sj";
+        //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/scan_sj";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/scan_sj";
 
         date_scaned = String.valueOf(Calendar.DAY_OF_MONTH);
 
@@ -183,10 +185,9 @@ public class ScanResultActivity extends AppCompatActivity {
 
     }
 
-
     private void showDate(int year, int i, int day) {
         tglTerima.setText(new StringBuilder().append(year).append("-")
-                .append(month).append("-").append(day));
+                .append(month+1).append("-").append(day));
     }
 
 

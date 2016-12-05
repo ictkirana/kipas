@@ -102,8 +102,8 @@ public class LoginActivity extends AppCompatActivity {
         }else{
 
             a = new AQuery(LoginActivity.this);
-            String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_login";
-            //String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_login";
+            //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_login";
+            String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_login";
 
             HashMap<String,String> params = new HashMap<String, String>();
             params.put("email",username.getText().toString());

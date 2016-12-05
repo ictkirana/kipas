@@ -214,8 +214,8 @@ public class Main2Activity extends AppCompatActivity
     }
 
     private void loadHistory() {
-        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_his_sj";
-        //String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_his_sj";
+        //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_his_sj";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_his_sj";
 
 
         // get user data from session
@@ -307,8 +307,8 @@ public class Main2Activity extends AppCompatActivity
     }
 
     private void loadOutstanding() {
-        String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_outs_sj";
-        //String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj";
+        //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_outs_sj";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj";
 
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
@@ -676,7 +676,8 @@ public class Main2Activity extends AppCompatActivity
         Log.d("pwd2",""+pwd2);
         //if (pwd1 == pwd2){
             a = new AQuery(Main2Activity.this);
-            String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/change_password";
+            //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/change_password";
+            String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/change_password";
             HashMap<String,String> params = new HashMap<String, String>();
             params.put("email",mail);
             params.put("password_lama",pass);
