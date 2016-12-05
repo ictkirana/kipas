@@ -31,7 +31,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     ZXingScannerView mScannerView;
     RealmHelper realmHelper;
     AQuery a;
-    String email,plant,nopol,fullname, nik,gudang,date_scaned;
+    String email,plant,nopol,fullname, nik,gudang,date_scaned,is_scaned;
     SessionManager session;
 
     @Override
@@ -75,6 +75,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
         //final String[] plant = new String[1];
         final String[] tglKirim = new String[1];
+        final String[] datescan = new String[1];
+        final String[] isscan = new String[1];
 
         Log.d("barcode",""+barcode);
         Log.d("plant",""+plant);
@@ -108,6 +110,9 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                                     plant = b.getString("plant_code");
                                     tglKirim[0] = b.getString("date_sent");
                                     nopol = b.getString("polisi_no");
+                                    isscan[0] = b.getString("is_scaned");
+                                    datescan[0] = b.getString("date_scaned");
+
                                     //date_scaned = b.getString("date_scaned");
 
                                 }
@@ -122,8 +127,9 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             intent.putExtra("fullname",fullname);
                             intent.putExtra("nik",nik);
                             intent.putExtra("gudang",gudang);
-                            //intent.putExtra("date_scaned",date_scaned);
-                            Log.d("date_scaned",""+date_scaned);
+                            intent.putExtra("is_scaned",isscan[0]);
+                            intent.putExtra("date_scaned",datescan[0]);
+                            Log.d("date_scaned di scan",""+datescan[0]);
                             startActivity(intent);
                         }else {
                             /*
