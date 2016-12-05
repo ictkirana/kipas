@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import kiranamegatara.com.kipas.Controller.SessionManager;
 import kiranamegatara.com.kipas.R;
 import kiranamegatara.com.kipas.Controller.RealmHelper;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -31,15 +32,21 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     RealmHelper realmHelper;
     AQuery a;
     String email,plant,nopol,fullname, nik,gudang,date_scaned;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
+        session = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = session.getUserDetails();
+        plant = user.get(SessionManager.keyPlant);
+
+
         Intent inte = getIntent();
         email = inte.getStringExtra("email_user");
-        plant = inte.getStringExtra("plant");
+        //plant = inte.getStringExtra("plant");
         fullname = inte.getStringExtra("fullname");
         nik = inte.getStringExtra("nik");
         gudang = inte.getStringExtra("gudang");
@@ -101,7 +108,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                                     plant = b.getString("plant_code");
                                     tglKirim[0] = b.getString("date_sent");
                                     nopol = b.getString("polisi_no");
-                                    date_scaned = b.getString("date_scaned");
+                                    //date_scaned = b.getString("date_scaned");
 
                                 }
                             }
@@ -115,7 +122,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             intent.putExtra("fullname",fullname);
                             intent.putExtra("nik",nik);
                             intent.putExtra("gudang",gudang);
-                            intent.putExtra("date_scaned",date_scaned);
+                            //intent.putExtra("date_scaned",date_scaned);
+                            Log.d("date_scaned",""+date_scaned);
                             startActivity(intent);
                         }else {
                             /*

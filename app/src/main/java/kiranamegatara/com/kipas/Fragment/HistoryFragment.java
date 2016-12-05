@@ -327,8 +327,10 @@ public class HistoryFragment extends Fragment {
             detail.add("Gudang: "+results.get(i).getGudang());
             detail.add("Tanggal Kirim: "+results.get(i).getDate_sent());
             detail.add("No Polisi: "+results.get(i).getPolisi_no());
-            detail.add("Tanggal Terima: "+ results.get(i).getDate_received());
-            detail.add("Tanggal Scan: "+ results.get(i).getDate_scaned());
+            String tglTerima = results.get(i).getDate_received();
+            detail.add("Tanggal Terima: "+ tglTerima.substring(0,10));
+            String tglScan = results.get(i).getDate_scaned();
+            detail.add("Tanggal Scan: "+ tglScan.substring(0,10));
             listDataChild.put(listDataHeader.get(i), detail);
         }
 

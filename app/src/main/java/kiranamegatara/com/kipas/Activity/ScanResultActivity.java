@@ -32,6 +32,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import kiranamegatara.com.kipas.Controller.SessionManager;
 import kiranamegatara.com.kipas.Model.SrtJalan;
 import kiranamegatara.com.kipas.Model.SuratJalan;
 import kiranamegatara.com.kipas.R;
@@ -44,6 +45,7 @@ public class ScanResultActivity extends AppCompatActivity {
     private int year, month, day;
     String email;
     AQuery a;
+    SessionManager session;
 
     RealmHelper realmHelper;
 
@@ -74,8 +76,8 @@ public class ScanResultActivity extends AppCompatActivity {
         Intent intent = getIntent();
         nosurat = intent.getStringExtra("surat_jalan_no");
         getTanggalKirim = intent.getStringExtra("tglKirim");
-       // tanggalKirim = getTanggalKirim.substring(0,10);
-        tanggalKirim = "2016-11-22";
+        tanggalKirim = getTanggalKirim.substring(0,10);
+       // tanggalKirim = "2016-11-22";
         Log.d("tanggal kirim", tanggalKirim);
         pabrik = intent.getStringExtra("plant");
         polisi_no = intent.getStringExtra("polisi_no");
@@ -83,11 +85,11 @@ public class ScanResultActivity extends AppCompatActivity {
         fullname = intent.getStringExtra("fullname");
         nik = intent.getStringExtra("nik");
         gudang = intent.getStringExtra("gudang");
-        date_scaned = intent.getStringExtra("date_scaned");
+        //date_scaned = intent.getStringExtra("date_scaned");
 
         number.setText(nosurat);
         plant.setText(pabrik);
-        tglKirim.setText(tanggalKirim);
+        tglKirim.setText(getTanggalKirim);
         nopol.setText(polisi_no);
 
         tglTerima.setOnClickListener(new View.OnClickListener() {
@@ -134,9 +136,11 @@ public class ScanResultActivity extends AppCompatActivity {
         //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/scan_sj";
         String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/scan_sj";
 
+        date_scaned = String.valueOf(Calendar.DAY_OF_MONTH);
+
         Log.d("date_received",""+ tglTerima.getText().toString());
         Log.d("srt_jln_no",""+ nosurat);
-        Log.d("date_scaned",""+ tglTerima.getText().toString());
+        Log.d("date_scaned",""+ date_scaned);
         Log.d("user_full_name",""+ fullname);
         Log.d("plant_code",""+ pabrik);
         Log.d("nik",""+ nik);
@@ -144,7 +148,7 @@ public class ScanResultActivity extends AppCompatActivity {
 
         HashMap<String,String> params = new HashMap<String, String>();
         params.put("srt_jln_no",nosurat);
-        params.put("date_scaned",tglTerima.getText().toString());
+        params.put("date_scaned",date_scaned);
         params.put("user_full_name",fullname);
         params.put("plant_code",pabrik);
         params.put("date_received",tglTerima.getText().toString());
@@ -181,10 +185,9 @@ public class ScanResultActivity extends AppCompatActivity {
 
     }
 
-
     private void showDate(int year, int i, int day) {
         tglTerima.setText(new StringBuilder().append(year).append("-")
-                .append(month).append("-").append(day));
+                .append(month+1).append("-").append(day));
     }
 
 
@@ -224,7 +227,7 @@ public class ScanResultActivity extends AppCompatActivity {
                     calendar.add(Calendar.DAY_OF_MONTH, -1);
                 }
             //}
-            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+            //datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
             return datePickerDialog;
         }
         return null;
