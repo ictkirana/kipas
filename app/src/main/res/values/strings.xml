@@ -14,6 +14,7 @@
     <string name="nav_history">History</string>
     <string name="nav_logout">Log Out</string>
     <string name="nav_outstanding">Outstanding</string>
+    <string name="nav_change">Change Password</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
@@ -21,6 +22,7 @@
         <item>Outstanding</item>
         <item>History</item>
         <item>Logout</item>
+        <item>Change Password</item>
     </string-array>
 
     <string name="activity_title_about_us">About Us</string>

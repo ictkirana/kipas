@@ -51,6 +51,7 @@ import java.util.TimerTask;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import kiranamegatara.com.kipas.Fragment.ChangeFragment;
 import kiranamegatara.com.kipas.Fragment.HistoryFragment;
 import kiranamegatara.com.kipas.Fragment.HomeFragment;
 import kiranamegatara.com.kipas.Fragment.Outstanding;
@@ -91,6 +92,7 @@ public class Main2Activity extends AppCompatActivity
     private static final String TAG_HISTORY = "history";
     private static final String TAG_OUTSTANDING = "outstanding";
     private static final String TAG_LOG_OUT = "logout";
+    private static final String TAG_LOG_CHG = "change";
     public static String CURRENT_TAG = TAG_HOME;
 
     // toolbar titles respected to selected nav menu item
@@ -410,6 +412,10 @@ public class Main2Activity extends AppCompatActivity
                         drawer.closeDrawers();
                         return true;
                     */
+                    case R.id.nav_change:
+                        navItemIndex = 4;
+                        CURRENT_TAG = TAG_LOG_CHG;
+                        break;
                     default:
                         navItemIndex = 0;
                 }
@@ -558,7 +564,10 @@ public class Main2Activity extends AppCompatActivity
                 AlertDialog alertDialog = builder.create();
                 alertDialog.setTitle("Logout!");
                 alertDialog.show();
-
+            case 4:
+                // history
+                ChangeFragment changeFragment = new ChangeFragment();
+                return changeFragment;
             default:
                 return new HomeFragment();
         }
@@ -724,6 +733,8 @@ public class Main2Activity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
 
         } else if (id == R.id.nav_about) {
+
+        }else if (id == R.id.nav_change) {
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
