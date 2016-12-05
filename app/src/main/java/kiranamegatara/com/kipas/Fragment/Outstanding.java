@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Spinner;
 
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
@@ -64,7 +66,8 @@ public class Outstanding extends Fragment {
     RealmHelper realmHelper;
     private ArrayList<SrtJalanModel> data;
     Realm realm,getRealm;
-
+    Spinner spn_wh;
+    ArrayList<String> data_array;
     public Outstanding() {
         // Required empty public constructor
     }
@@ -202,7 +205,12 @@ public class Outstanding extends Fragment {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_outstanding, container, false);
         expListView = (ExpandableListView)view.findViewById(R.id.lvExpOut);
-
+        spn_wh= (Spinner) view.findViewById(R.id.spngudang);
+        getListGudang();
+        data_array= new ArrayList<String>();
+        ArrayAdapter adp_list_kota = new ArrayAdapter(this.getActivity(),android.R.layout.simple_spinner_item,data_array);
+        adp_list_kota.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spn_wh.setAdapter(adp_list_kota);
         // preparing list data
         //prepareListData();
 
@@ -348,6 +356,65 @@ public class Outstanding extends Fragment {
         expListView.setAdapter(listAdapter);
 
         return view;
+    }
+
+    private void getListGudang() {
+        String url = "http://10.0.9.35/ci/index.php/cls_ws_sir/get_outs_sj_wh";
+//        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj_wh";
+
+
+        session = new SessionManager(getContext().getApplicationContext());
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+        String plant = user.get(SessionManager.keyPlant);
+
+        HashMap<String,String> params = new HashMap<String, String>();
+
+        RealmResults<LoginUser> users = realm.where(LoginUser.class).findAll();
+        String pabrik = "";
+        for (int i = 0; i < users.size();i++){
+            pabrik = users.get(i).getPlant();
+        }
+        getRealm = Realm.getDefaultInstance();
+
+        params.put("plant_code",pabrik);
+        Log.d("pabrik dari realm",pabrik);
+        Log.d("plant dr session",""+plant);
+        Log.d("param wh",""+params);
+
+
+        ProgressDialog progress = new ProgressDialog(getContext());
+        progress.setMessage("unduh data...");
+        progress.setCancelable(false);
+        progress.setIndeterminate(false);
+
+        aQuery.progress(progress).ajax(url,params,String.class, new AjaxCallback<String>(){
+            @Override
+            public void callback(String url, String object, AjaxStatus status) {
+                if (object != null){
+                    try {
+                        JSONObject jsonObject = new JSONObject(object);
+                        String hasil = jsonObject.getString("result");
+                        String pesan = jsonObject.getString("msg");
+                        //Toast.makeText(getContext(),hasil,Toast.LENGTH_LONG).show();
+                        Log.d("surat_jalan","hasil " + hasil);
+
+                        if (hasil.equalsIgnoreCase("true")){
+                            JSONArray jsonarray = jsonObject.getJSONArray("data");
+                            int length = jsonarray.length();
+                            Log.d("jumlah gudang", "" + length);
+                            Log.d("pesan gudang",pesan);
+                            for (int i = 0; i < jsonarray.length(); i++){
+                                JSONObject b = jsonarray.getJSONObject(i);
+                                data_array.add(b.getString("warehouse_code"));
+                            }
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
