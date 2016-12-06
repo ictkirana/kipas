@@ -29,6 +29,8 @@ public class SessionManager {
     public static final String keyPlant = "keyPlant";
     public static final String keyCompany = "keyCompany";
     public static final String keyGudang = "keyGudang";
+    public static final String keyNik = "keyNik";
+    public static final String keyFullName = "keyFullname";
 
     public SessionManager(Context context){
         this.c = context;
@@ -37,12 +39,15 @@ public class SessionManager {
     }
 
 
-    public void createSession(String username,String plant,String company,String gudang){
+    public void createSession(String username,String plant,String company,String gudang,
+                              String nik,String fullname){
         editor.putBoolean(isLogin,true);
         editor.putString(keyEmail,username);
         editor.putString(keyPlant,plant);
         editor.putString(keyCompany,company);
         editor.putString(keyGudang,gudang);
+        editor.putString(keyNik,nik);
+        editor.putString(keyFullName,fullname);
         editor.commit();
     }
 
@@ -90,6 +95,12 @@ public class SessionManager {
 
         // user gudang
         user.put(keyGudang, preferences.getString(keyGudang, null));
+
+        // user nik
+        user.put(keyNik, preferences.getString(keyNik, null));
+
+        // user fullname
+        user.put(keyFullName, preferences.getString(keyFullName, null));
 
         // return user
         return user;

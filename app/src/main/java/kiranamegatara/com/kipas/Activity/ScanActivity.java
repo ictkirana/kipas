@@ -111,7 +111,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                                     tglKirim[0] = b.getString("date_sent");
                                     nopol = b.getString("polisi_no");
                                     isscan[0] = b.getString("is_scaned");
-                                    datescan[0] = b.getString("date_scaned");
+                                    //datescan[0] = b.getString("date_scaned");
 
                                     //date_scaned = b.getString("date_scaned");
 
@@ -128,8 +128,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             intent.putExtra("nik",nik);
                             intent.putExtra("gudang",gudang);
                             intent.putExtra("is_scaned",isscan[0]);
-                            intent.putExtra("date_scaned",datescan[0]);
-                            Log.d("date_scaned di scan",""+datescan[0]);
+                            //intent.putExtra("date_scaned",datescan[0]);
+                            //Log.d("date_scaned di scan",""+datescan[0]);
                             startActivity(intent);
                         }else {
                             /*

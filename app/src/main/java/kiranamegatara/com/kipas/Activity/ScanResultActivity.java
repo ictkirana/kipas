@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.net.ParseException;
 import android.support.v7.app.AppCompatActivity;
@@ -82,18 +83,23 @@ public class ScanResultActivity extends AppCompatActivity {
         Log.d("tanggal kirim", tanggalKirim);
         pabrik = intent.getStringExtra("plant");
         polisi_no = intent.getStringExtra("polisi_no");
-        email = intent.getStringExtra("email_user");
-        fullname = intent.getStringExtra("fullname");
-        nik = intent.getStringExtra("nik");
-        gudang = intent.getStringExtra("gudang");
         is_scaned = intent.getStringExtra("is_scaned");
-        date_scaned = intent.getStringExtra("date_scaned");
+        //email = intent.getStringExtra("email_user");
+        //fullname = intent.getStringExtra("fullname");
+        //nik = intent.getStringExtra("nik");
+        gudang = intent.getStringExtra("gudang");
+
+        session = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = session.getUserDetails();
+        email = user.get(SessionManager.keyEmail);
+        fullname = user.get(SessionManager.keyFullName);
+        nik = user.get(SessionManager.keyNik);
 
         number.setText(nosurat);
         plant.setText(pabrik);
         tglKirim.setText(tanggalKirim.substring(8,10) + "-"
                         + tanggalKirim.substring(5,7) + "-"
-                        + tanggalKirim.substring(8,10));
+                        + tanggalKirim.substring(0,4));
         nopol.setText(polisi_no);
 
         tglTerima.setOnClickListener(new View.OnClickListener() {
@@ -150,12 +156,17 @@ public class ScanResultActivity extends AppCompatActivity {
         Log.d("nik",""+ nik);
         Log.d("gudang",""+ gudang);
 
+        String tglterima = tglTerima.getText().toString();
+        String terima = tglterima.substring(6,10)+"-" + tglterima.substring(3,5) + "-"+tglterima.substring(0,2);
+        Log.d("terima", ""+ terima);
+
+
         HashMap<String,String> params = new HashMap<String, String>();
         params.put("srt_jln_no",nosurat);
         params.put("date_scaned",date_scaned);
         params.put("user_full_name",fullname);
         params.put("plant_code",pabrik);
-        params.put("date_received",tglTerima.getText().toString());
+        params.put("date_received",terima);
         params.put("nik",nik);
         params.put("warehouse_code",gudang);
 
@@ -174,10 +185,6 @@ public class ScanResultActivity extends AppCompatActivity {
                         String pesan = jsonObject.getString("msg");
                         Log.d("surat_jalan","hasil " + hasil);
                         if (hasil.equalsIgnoreCase("true")){
-                        //    JSONArray jsonarray = jsonObject.getJSONArray("data");
-                        //    int length = jsonarray.length();
-                        //    Log.d("jumlah surat jalan", "" + length);
-                       //     Log.d("pesan",pesan);
                             Toast.makeText(getApplicationContext(),"Tersimpan",Toast.LENGTH_LONG).show();
                         }
                     }catch (JSONException e){
@@ -190,12 +197,18 @@ public class ScanResultActivity extends AppCompatActivity {
     }
 
     private void showDate(int year, int i, int day) {
-        //tglTerima.setText(new StringBuilder().append(year).append("-")
-        //        .append(month+1).append("-").append(day));
-        tglTerima.setText(new StringBuilder().append(day).append("-").append(month + 1)
-                    .append("-").append(year));
-    }
 
+        //tglTerima.setText(new StringBuilder().append(year).append("-")
+        //        .append(month+1).append("-").append("0").append(day));
+        String hari = String.valueOf(day);
+        if (hari.length() == 1){
+            tglTerima.setText(new StringBuilder().append("0").append(day).append("-").append(month + 1)
+                    .append("-").append(year));
+        }else {
+            tglTerima.setText(new StringBuilder().append(day).append("-").append(month + 1)
+                    .append("-").append(year));
+        }
+    }
 
     @SuppressWarnings("deprecation")
     public void setDate(View view) {

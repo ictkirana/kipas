@@ -331,6 +331,7 @@ public class HistoryFragment extends Fragment {
                     + tglKirim.substring(8,10));
             detail.add("No Polisi: "+results.get(i).getPolisi_no());
             String tglTerima = results.get(i).getDate_received();
+            Log.d("tanggal terima", results.get(i).getDate_received());
             detail.add("Tanggal Terima: "+ tglTerima.substring(0,4) + "-"
                                         + tglTerima.substring(5,7) + "-"
                                         + tglTerima.substring(8,10));

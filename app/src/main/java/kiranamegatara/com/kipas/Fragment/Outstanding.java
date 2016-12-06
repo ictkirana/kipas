@@ -69,7 +69,7 @@ public class Outstanding extends Fragment {
     private ArrayList<SrtJalanModel> data;
     Realm realm,getRealm;
     Spinner spn_wh;
-    List<String> data_array;
+    ArrayList<String> data_array;
     public Outstanding() {
         // Required empty public constructor
     }
