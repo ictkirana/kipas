@@ -1,8 +1,10 @@
 package kiranamegatara.com.kipas.Activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
@@ -147,7 +149,12 @@ public class ScanResultActivity extends AppCompatActivity {
         String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/scan_sj";
 
         date_scaned = String.valueOf(Calendar.DAY_OF_MONTH);
-
+        /*
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = df.format(c.getTime());
+        date_scaned = formattedDate;
+        */
         Log.d("date_received",""+ tglTerima.getText().toString());
         Log.d("srt_jln_no",""+ nosurat);
         Log.d("date_scaned",""+ date_scaned);
@@ -231,9 +238,6 @@ public class ScanResultActivity extends AppCompatActivity {
                 tahun = tanggalKirim.substring(0,4);
                 bulan = tanggalKirim.substring(5,7);
                 hari = tanggalKirim.substring(8,10);
-                Log.d("tahun",tahun);
-                Log.d("bulan",bulan);
-                Log.d("hari",hari);
                 thn = Integer.parseInt(tahun);
                 bln = Integer.parseInt(bulan);
                 hri = Integer.parseInt(hari);

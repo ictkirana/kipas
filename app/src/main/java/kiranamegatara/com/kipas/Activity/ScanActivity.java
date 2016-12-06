@@ -2,13 +2,17 @@ package kiranamegatara.com.kipas.Activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
@@ -97,7 +101,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                         JSONObject jsonObject = new JSONObject(object);
                         String hasil = jsonObject.getString("result");
                         String pesan = jsonObject.getString("msg");
-                        Intent intent = new Intent(getApplicationContext(),ScanResultActivity.class);
+                        final Intent intent = new Intent(getApplicationContext(),ScanResultActivity.class);
                         Log.d("pesan",pesan);
                         if (hasil.equalsIgnoreCase("true")){
                             JSONArray jsonarray = jsonObject.getJSONArray("data");
@@ -130,14 +134,29 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             intent.putExtra("is_scaned",isscan[0]);
                             //intent.putExtra("date_scaned",datescan[0]);
                             //Log.d("date_scaned di scan",""+datescan[0]);
-                            startActivity(intent);
+                            if (isscan[0].equalsIgnoreCase("0")) {
+                                startActivity(intent);
+                            }else {
+                                final Dialog dialog = new Dialog(ScanActivity.this);
+                                dialog.setContentView(R.layout.alert_scan);
+                                Button btnya = (Button)dialog.findViewById(R.id.button2);
+                                Button btntdk = (Button)dialog.findViewById(R.id.button1);
+                                btnya.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        startActivity(intent);
+                                    }
+                                });
+                                btntdk.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        startActivity(new Intent(getApplicationContext(),Main2Activity.class));
+                                    }
+                                });
+                                dialog.show();
+
+                            }
                         }else {
-                            /*
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-                            builder.setMessage("No Surat Jalan tidak valid!").setTitle("Error");
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                            */
                             Toast.makeText(getApplicationContext(),"No Surat Jalan tidak valid!",Toast.LENGTH_LONG).show();
                         }
                     }catch (JSONException e){
