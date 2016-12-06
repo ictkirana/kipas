@@ -177,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 }
                                 try {
-                                    session.createSession(mail, plant_code, company_code, authorized_warehouse);
+                                    session.createSession(mail, plant_code, company_code, authorized_warehouse,nik,full_name);
                                 }catch (NullPointerException n){
 
                                 }

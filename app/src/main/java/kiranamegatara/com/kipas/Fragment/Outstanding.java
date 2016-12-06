@@ -216,10 +216,11 @@ public class Outstanding extends Fragment {
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
         String gudang[] = user.get(SessionManager.keyGudang).split(".");
-        Log.d("gudang arr",gudang.toString());
+
 //        getListGudang();
         for (int i=0; i < gudang.length; i++){
             data_array.add(gudang[i]);
+            Log.d("gudang arr",""+gudang[i].toString());
         }
 
         data_array= new ArrayList<String>();
