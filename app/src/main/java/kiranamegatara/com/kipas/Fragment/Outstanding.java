@@ -213,7 +213,6 @@ public class Outstanding extends Fragment {
         listDataChild = new HashMap<String, List<String>>();
         getRealm = Realm.getDefaultInstance();
         session = new SessionManager(getContext().getApplicationContext());
-        // get user data from session
         HashMap<String, String> user = session.getUserDetails();
         String gudang = user.get(SessionManager.keyGudang);
         data_array= new ArrayList<String>();
