@@ -243,6 +243,7 @@ public class Outstanding extends Fragment {
                         detail.add("Plant,"+realmResults.get(i).getPlant());
                         detail.add("Gudang,"+realmResults.get(i).getGudang());
                         String tglKirim = realmResults.get(i).getDate_sent();
+                        Log.d("tgl kirim",tglKirim.toString());
                         detail.add("Tanggal Kirim,"+ tglKirim.substring(0,10));
                         detail.add("No Polisi,"+realmResults.get(i).getPolisi_no());
                         listDataChild.put(listDataHeader.get(i), detail);
