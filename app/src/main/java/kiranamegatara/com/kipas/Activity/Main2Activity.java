@@ -218,16 +218,18 @@ public class Main2Activity extends AppCompatActivity
     private void loadHistory() {
         //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_his_sj";
         String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_his_sj";
-
+//        String url = "http://10.0.9.35/ci/index.php/cls_ws_sir/get_his_sj";
 
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
         String plant = user.get(SessionManager.keyPlant);
+        String gudang = user.get(SessionManager.keyGudang);
 
         HashMap<String,String> params = new HashMap<String, String>();
         getRealm = Realm.getDefaultInstance();
         params.put("plant_code",plant);
-        Log.d("plant dr session",""+plant);
+        params.put("authorized_warehouse",gudang);
+        Log.d("param his",""+params);
 
         ProgressDialog progress = new ProgressDialog(getApplicationContext());
         progress.setMessage("unduh data...");
@@ -311,20 +313,23 @@ public class Main2Activity extends AppCompatActivity
     private void loadOutstanding() {
         //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_outs_sj";
         String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_outs_sj";
+//        String url = "http://10.0.9.35/ci/index.php/cls_ws_sir/get_outs_sj";
 
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
         String plant = user.get(SessionManager.keyPlant);
+        String gudang = user.get(SessionManager.keyGudang);
 
         HashMap<String,String> params = new HashMap<String, String>();
         realm = Realm.getDefaultInstance();
         params.put("plant_code",plant);
+        params.put("authorized_warehouse",gudang);
 
         ProgressDialog progress = new ProgressDialog(getApplicationContext());
         progress.setMessage("unduh data...");
         progress.setCancelable(false);
         progress.setIndeterminate(false);
-
+        Log.d("param out",params.toString());
         aQuery.progress(progress).ajax(url,params,String.class, new AjaxCallback<String>(){
             @Override
             public void callback(String url, String object, AjaxStatus status) {
