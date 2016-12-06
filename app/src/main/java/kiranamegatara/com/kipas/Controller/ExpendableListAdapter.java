@@ -2,6 +2,7 @@ package kiranamegatara.com.kipas.Controller;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,17 +48,30 @@ public class ExpendableListAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
-
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_item, null);
         }
 
-        TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.lblListItem);
+//        TextView txtListChild = (TextView) convertView
+//                .findViewById(R.id.lblListItem);
+        TextView txtjudul = (TextView) convertView
+                .findViewById(R.id.txtjudul);
+        TextView txtisi = (TextView) convertView
+                .findViewById(R.id.txtisi);
 
-        txtListChild.setText(childText);
+//        txtListChild.setText(childText);
+        String [] data_cld=childText.toString().split(",");
+        for (int i=0; i<data_cld.length; i++){
+            if (i==0){
+                txtjudul.setText(data_cld[i]);
+            }else {
+                txtisi.setText(data_cld[i]);
+            }
+            Log.d("data child"+i,data_cld[i]);
+        }
+        Log.d("data child",childText);
         return convertView;
     }
 
