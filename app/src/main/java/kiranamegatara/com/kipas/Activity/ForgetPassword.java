@@ -16,8 +16,8 @@ public class ForgetPassword extends AppCompatActivity {
         setContentView(R.layout.activity_forget_password);
         webForgot = (WebView)findViewById(R.id.webViewForgot);
 
-        //String url ="https://www.kmshipmentstatus.com/forget/forget.php";
-        String url ="http://10.0.0.105/dev/forget/forget.php";
+        String url ="https://www.kmshipmentstatus.com/ws_sir/forget/forget.php";
+//        String url ="http://10.0.0.105/dev/forget/forget.php";
         webForgot.getSettings().setJavaScriptEnabled(true);
         webForgot.loadUrl(url);
         webForgot.setWebViewClient(new MyWebLaunch());

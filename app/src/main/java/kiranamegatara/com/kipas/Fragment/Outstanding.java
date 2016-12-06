@@ -69,7 +69,7 @@ public class Outstanding extends Fragment {
     private ArrayList<SrtJalanModel> data;
     Realm realm,getRealm;
     Spinner spn_wh;
-    ArrayList<String> data_array;
+    List<String> data_array;
     public Outstanding() {
         // Required empty public constructor
     }
@@ -215,37 +215,59 @@ public class Outstanding extends Fragment {
         session = new SessionManager(getContext().getApplicationContext());
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
-        String gudang[] = user.get(SessionManager.keyGudang).split(".");
-        Log.d("gudang arr",gudang.toString());
-//        getListGudang();
-        for (int i=0; i < gudang.length; i++){
-            data_array.add(gudang[i]);
-        }
+        String gudang = user.get(SessionManager.keyGudang);
+//        String [] gd=gudang.toString().trim().split("|");
+//        Log.d("gudang arr",gudang.toString());
+//        Log.d("gudang arr",gd.toString());
+//        for (int i=0; i < gd.length; i++){
+//            if (gd[i]!=""){
+//                data_array.add(gd[i]);
+//                Log.d("gudang arr",gd[i].toString());
+//            }
+//        }
 
         data_array= new ArrayList<String>();
+        data_array.add("pilih gudang");
+        getListGudang();
         ArrayAdapter adp_list_kota = new ArrayAdapter(this.getActivity(),android.R.layout.simple_spinner_item,data_array);
         adp_list_kota.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spn_wh.setAdapter(adp_list_kota);
         spn_wh.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class).equalTo("gudang", data_array.get(position))
-                        .equalTo("date_scaned","0000-00-00 00:00:00")
-                        .findAll();
+                RealmResults<SrtJalan> realmResults;
+                if (data_array.get(position)=="pilih gudang"){
+                    realmResults = getRealm.where(SrtJalan.class)
+                            .equalTo("date_scaned","0000-00-00 00:00:00")
+                            .findAll();
+                }else{
+                    realmResults = getRealm.where(SrtJalan.class).equalTo("gudang", data_array.get(position))
+                            .equalTo("date_scaned","0000-00-00 00:00:00")
+                            .findAll();
+                }
                 Toast.makeText(getContext(),data_array.get(position),Toast.LENGTH_LONG).show();
                 Log.d("isi realm",""+realmResults.size());
-                for (int i = 0; i < realmResults.size(); i++){
-                    listDataHeader.add(realmResults.get(i).getNosurat());
-                    List<String> detail = new ArrayList<String>();
-                    detail.add("Plant: "+realmResults.get(i).getPlant());
-                    detail.add("Gudang: "+realmResults.get(i).getGudang());
-                    String tglKirim = realmResults.get(i).getDate_sent();
-                    detail.add("Tanggal Kirim: "+ tglKirim.substring(0,10));
-                    detail.add("No Polisi: "+realmResults.get(i).getPolisi_no());
-                    listDataChild.put(listDataHeader.get(i), detail);
+                if (realmResults.size()>1){
+                    for (int i = 0; i < realmResults.size(); i++){
+                        listDataHeader.add(realmResults.get(i).getNosurat());
+                        List<String> detail = new ArrayList<String>();
+                        detail.add("Plant: "+realmResults.get(i).getPlant());
+                        detail.add("Gudang: "+realmResults.get(i).getGudang());
+                        String tglKirim = realmResults.get(i).getDate_sent();
+                        detail.add("Tanggal Kirim: "+ tglKirim.substring(0,10));
+                        detail.add("No Polisi: "+realmResults.get(i).getPolisi_no());
+                        listDataChild.put(listDataHeader.get(i), detail);
+                    }
+                    listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
+                    expListView.setAdapter(listAdapter);
+                }else {
+                    listDataHeader.clear();
+                    listDataChild.clear();
+                    listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
+                    expListView.setAdapter(listAdapter);
+                    Toast.makeText(getContext(),"Data Tidak ada.",Toast.LENGTH_LONG).show();
                 }
-                listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
-                expListView.setAdapter(listAdapter);
+
 
             }
 
@@ -324,7 +346,10 @@ public class Outstanding extends Fragment {
                             Log.d("pesan gudang",pesan);
                             for (int i = 0; i < jsonarray.length(); i++){
                                 JSONObject b = jsonarray.getJSONObject(i);
-                                data_array.add(b.getString("warehouse_code"));
+                                String wh=b.getString("warehouse_code");
+                                if (wh!=""){
+                                    data_array.add(wh.trim());
+                                }
                             }
                         }
                     }catch (JSONException e){

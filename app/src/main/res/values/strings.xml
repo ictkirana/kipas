@@ -19,7 +19,7 @@
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
-        <item>Outstanding</item>
+        <item>Outstanding Surat Jalan</item>
         <item>History</item>
         <item>Logout</item>
         <item>Change Password</item>

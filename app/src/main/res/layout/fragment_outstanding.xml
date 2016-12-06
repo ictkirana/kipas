@@ -10,19 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
-        android:text="Refresh Data"
-        android:layout_alignParentTop="true"
-        android:id="@+id/btnrefresh"
-        />
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spngudang"
-        android:layout_marginBottom="15dp">
+        android:layout_marginTop="55dp"
+        android:layout_marginBottom="5dp">
     </Spinner>
     <ExpandableListView
         android:layout_width="wrap_content"
