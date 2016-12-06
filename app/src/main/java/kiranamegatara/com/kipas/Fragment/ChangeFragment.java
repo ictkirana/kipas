@@ -4,6 +4,7 @@ package kiranamegatara.com.kipas.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,12 +60,20 @@ public class ChangeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String pass=oldpwd.getText().toString();
-                if (Helper.isCompare(newpwd1,newpwd2)){
-
+                if(TextUtils.isEmpty(oldpwd.getText())) {
+                    Toast.makeText(getContext(),"Password lama anda tidak boleh kosong.",Toast.LENGTH_LONG).show();
+                    oldpwd.requestFocus();
+                }else if(TextUtils.isEmpty(newpwd1.getText())) {
+                    Toast.makeText(getContext(),"Password baru anda tidak boleh kosong.",Toast.LENGTH_LONG).show();
+                    newpwd1.requestFocus();
+                }else if(TextUtils.isEmpty(newpwd2.getText())) {
+                    Toast.makeText(getContext(),"Konfirmasi password baru anda tidak boleh kosong.",Toast.LENGTH_LONG).show();
+                    newpwd2.requestFocus();
+                }else if (Helper.isCompare(newpwd1,newpwd2)){
                     newpwd1.setText("");
                     newpwd2.setText("");
                     newpwd1.requestFocus();
-                    Toast.makeText(getContext(),"Password yang anda masukkan tidak sama.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"Password baru yang anda masukkan tidak sama, mohon untuk dikonfirmasi ulang.",Toast.LENGTH_LONG).show();
                 }else {
                     Change_Password(email,pass,newpwd1,newpwd2);
                 }
