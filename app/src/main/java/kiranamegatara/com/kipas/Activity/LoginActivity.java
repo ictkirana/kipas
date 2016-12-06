@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 import io.realm.Realm;
 import kiranamegatara.com.kipas.Controller.Helper;
@@ -44,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
             plant_name,company_name,authorized_warehouse,is_active,is_kirana,
             is_reset,fail_counter,date_last_login,date_created,date_updated,
             is_deleted,dateCrt,dateUpd;
+    List<String> listWh;
+    List<String> listPlant;
     String email,passwd;
     //private String userId;
 
@@ -176,6 +179,25 @@ public class LoginActivity extends AppCompatActivity {
                                         date_last_login = String.valueOf(c.getTime());
                                     }
                                 }
+                                JSONArray jsonWh = jsonObject.getJSONArray("data_wh");
+                                int lengthWh = jsonWh.length();
+                                Log.d("jumlah data wh", "" + lengthWh);
+                                plant_code="";
+                                authorized_warehouse="";
+                                for (int i = 0; i < jsonWh.length(); i++){
+                                    JSONObject wh = jsonWh.getJSONObject(i);
+                                    if (plant_code!=""){
+                                        plant_code=plant_code+";"+wh.getString("plant_code");
+                                    }else {
+                                        plant_code=wh.getString("plant_code");
+                                    }
+                                    if (authorized_warehouse!=""){
+                                        authorized_warehouse=authorized_warehouse+";"+wh.getString("code");
+                                    }else {
+                                        authorized_warehouse=wh.getString("code");
+                                    }
+                                }
+                                Log.d("arr plant",plant_code+" - "+authorized_warehouse);
                                 try {
                                     session.createSession(mail, plant_code, company_code, authorized_warehouse,nik,full_name);
                                 }catch (NullPointerException n){
