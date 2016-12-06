@@ -240,11 +240,12 @@ public class Outstanding extends Fragment {
                     for (int i = 0; i < realmResults.size(); i++){
                         listDataHeader.add(realmResults.get(i).getNosurat());
                         List<String> detail = new ArrayList<String>();
-                        detail.add("Plant: "+realmResults.get(i).getPlant());
-                        detail.add("Gudang: "+realmResults.get(i).getGudang());
+                        detail.add("Plant,"+realmResults.get(i).getPlant());
+                        detail.add("Gudang,"+realmResults.get(i).getGudang());
                         String tglKirim = realmResults.get(i).getDate_sent();
-                        detail.add("Tanggal Kirim: "+ tglKirim.substring(0,10));
-                        detail.add("No Polisi: "+realmResults.get(i).getPolisi_no());
+                        Log.d("tgl kirim",tglKirim.toString());
+                        detail.add("Tanggal Kirim,"+ tglKirim.substring(0,10));
+                        detail.add("No Polisi,"+realmResults.get(i).getPolisi_no());
                         listDataChild.put(listDataHeader.get(i), detail);
                     }
                     listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
@@ -268,22 +269,22 @@ public class Outstanding extends Fragment {
 
 
 
-        RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class)
-                                                .equalTo("date_scaned","0000-00-00 00:00:00")
-                                                .findAll();
-        Log.d("isi realm",""+realmResults.size());
-        for (int i = 0; i < realmResults.size(); i++){
-            listDataHeader.add(realmResults.get(i).getNosurat());
-            List<String> detail = new ArrayList<String>();
-            detail.add("Plant: "+realmResults.get(i).getPlant());
-            detail.add("Gudang: "+realmResults.get(i).getGudang());
-            detail.add("Tanggal Kirim: "+realmResults.get(i).getDate_sent());
-            detail.add("No Polisi: "+realmResults.get(i).getPolisi_no());
-            listDataChild.put(listDataHeader.get(i), detail);
-        }
-
-        listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
-        expListView.setAdapter(listAdapter);
+//        RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class)
+//                                                .equalTo("date_scaned","0000-00-00 00:00:00")
+//                                                .findAll();
+//        Log.d("isi realm",""+realmResults.size());
+//        for (int i = 0; i < realmResults.size(); i++){
+//            listDataHeader.add(realmResults.get(i).getNosurat());
+//            List<String> detail = new ArrayList<String>();
+//            detail.add("Plant         : "+realmResults.get(i).getPlant());
+//            detail.add("Gudang        : "+realmResults.get(i).getGudang());
+//            detail.add("Tanggal Kirim : "+realmResults.get(i).getDate_sent());
+//            detail.add("No Polisi     : "+realmResults.get(i).getPolisi_no());
+//            listDataChild.put(listDataHeader.get(i), detail);
+//        }
+//
+//        listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
+//        expListView.setAdapter(listAdapter);
         return view;
     }
 
