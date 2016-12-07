@@ -131,6 +131,7 @@ public class ScanResultActivity extends AppCompatActivity {
                 getRealm.commitTransaction();
                 Intent intent1 = new Intent(ScanResultActivity.this,Main2Activity.class);
                 startActivity(intent1);
+                finish();
             }
         });
 
@@ -139,6 +140,7 @@ public class ScanResultActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent1 = new Intent(ScanResultActivity.this,ScanActivity.class);
                 startActivity(intent1);
+                finish();
             }
         });
     }

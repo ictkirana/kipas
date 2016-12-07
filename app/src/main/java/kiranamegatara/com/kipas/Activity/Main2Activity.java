@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -166,6 +167,7 @@ public class Main2Activity extends AppCompatActivity
                 intent1.putExtra("nik",nik);
                 intent1.putExtra("gudang",authorized_warehouse);
                 startActivity(intent1);
+                finish();
             }
         });
 
@@ -626,9 +628,9 @@ public class Main2Activity extends AppCompatActivity
                 navItemIndex = 0;
                 CURRENT_TAG = TAG_HOME;
                 loadHomeFragment();
-                //finish();
+                finish();
             }else if(navItemIndex == 0){
-                //finish();
+                finish();
                 System.exit(0);
             }
         }
@@ -788,5 +790,27 @@ public class Main2Activity extends AppCompatActivity
             session.logout();
             finish();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                android.app.AlertDialog.Builder alertkipas = new android.app.AlertDialog.Builder(Main2Activity.this);
+                alertkipas.setMessage("Apakah anda yakin untuk keluar ?");
+                alertkipas.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        Toast.makeText(MainActivity.this, "Terima kasih", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                alertkipas.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).show();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

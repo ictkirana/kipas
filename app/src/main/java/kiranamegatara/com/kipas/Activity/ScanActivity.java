@@ -75,7 +75,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
         a = new AQuery(ScanActivity.this);
         //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_sj";
-        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
+//        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
+        String url = "http://10.0.9.35/ci/index.php/cls_ws_sir/get_sj";
 
 
         //final String[] plant = new String[1];
@@ -89,7 +90,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         HashMap<String,String> params = new HashMap<String, String>();
         params.put("srt_jln_no",barcode);
         params.put("plant_code",plant);
-        //params.put("authorized_warehouse",gudang);
+        params.put("authorized_warehouse",gudang);
 
         ProgressDialog progress = new ProgressDialog(ScanActivity.this);
         progress.setCancelable(false);
@@ -138,6 +139,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             //Log.d("date_scaned di scan",""+datescan[0]);
                             if (isscan[0].equalsIgnoreCase("0")) {
                                 startActivity(intent);
+                                finish();
                             }else {
                                 final Dialog dialog = new Dialog(ScanActivity.this);
                                 dialog.setContentView(R.layout.alert_scan);
@@ -147,12 +149,14 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                                     @Override
                                     public void onClick(View view) {
                                         startActivity(intent);
+                                        finish();
                                     }
                                 });
                                 btntdk.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         startActivity(new Intent(getApplicationContext(),Main2Activity.class));
+                                        finish();
                                     }
                                 });
                                 dialog.show();
