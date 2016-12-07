@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Surat jalan sudah pernah di scan, scan ulang?"
+        android:text="Surat jalan sudah pernah di scan, terima ulang?"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView"
