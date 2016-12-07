@@ -46,6 +46,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         session = new SessionManager(getApplicationContext());
         HashMap<String, String> user = session.getUserDetails();
         plant = user.get(SessionManager.keyPlant);
+        gudang = user.get(SessionManager.keyGudang);
 
 
         Intent inte = getIntent();
@@ -53,7 +54,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         //plant = inte.getStringExtra("plant");
         fullname = inte.getStringExtra("fullname");
         nik = inte.getStringExtra("nik");
-        gudang = inte.getStringExtra("gudang");
+        //gudang = inte.getStringExtra("gudang");
         Log.d("email",""+email);
         Log.d("plant",""+plant);
         QrScanner();
@@ -88,6 +89,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         HashMap<String,String> params = new HashMap<String, String>();
         params.put("srt_jln_no",barcode);
         params.put("plant_code",plant);
+        //params.put("authorized_warehouse",gudang);
 
         ProgressDialog progress = new ProgressDialog(ScanActivity.this);
         progress.setCancelable(false);
