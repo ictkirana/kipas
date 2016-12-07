@@ -75,8 +75,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
         a = new AQuery(ScanActivity.this);
         //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_sj";
-//        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
-        String url = "http://10.0.9.35/ci/index.php/cls_ws_sir/get_sj";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
+//        String url = "http://10.0.9.35/ci/index.php/cls_ws_sir/get_sj";
 
 
         //final String[] plant = new String[1];
