@@ -69,7 +69,8 @@ public class ScanResultActivity extends AppCompatActivity {
 
         simpan = (Button)findViewById(R.id.btnTerima);
         kembali = (Button)findViewById(R.id.btnRescan);
-        
+        btnChangeTime = (Button) findViewById(R.id.btnPickTime);
+
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
 
@@ -140,7 +141,12 @@ public class ScanResultActivity extends AppCompatActivity {
             }
         });
 
-        addListenerOnButton();
+        btnChangeTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(TIME_DIALOG_ID);
+            }
+        });
     }
 
     private void SaveSuratJalan() {
@@ -282,24 +288,6 @@ public class ScanResultActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-
-
-    public void addListenerOnButton() {
-
-        btnChangeTime = (Button) findViewById(R.id.btnPickTime);
-
-        btnChangeTime.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                showDialog(TIME_DIALOG_ID);
-
-            }
-
-        });
-
-    }
 
     @Nullable
     @Override

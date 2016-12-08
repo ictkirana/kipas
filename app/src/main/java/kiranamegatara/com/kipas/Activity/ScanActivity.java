@@ -25,6 +25,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import kiranamegatara.com.kipas.Controller.SessionManager;
@@ -137,6 +141,15 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                             intent.putExtra("gudang",gudang);
                             intent.putExtra("is_scaned",isscan[0]);
                             intent.putExtra("date_scaned",datescan[0]);
+                            SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
+                            try {
+                                Date date = dateFormat.parse(datescan[0]);
+                                String formattime = String.valueOf(date);
+                                Log.d("format tanggal",""+ date);
+                                Log.d("format tanggal stirng",""+ formattime);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                             //Log.d("date_scaned di scan",""+datescan[0]);
                             if (isscan[0].equalsIgnoreCase("0")) {
                                 startActivity(intent);
