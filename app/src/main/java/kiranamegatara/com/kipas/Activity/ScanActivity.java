@@ -11,6 +11,7 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -75,8 +76,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
         a = new AQuery(ScanActivity.this);
         //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/get_sj";
-//        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
-        String url = "http://10.0.9.35/ci/index.php/cls_ws_sir/get_sj";
+        String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/get_sj";
+//        String url = "http://10.0.9.35/ci/index.php/cls_ws_sir/get_sj";
 
 
         //final String[] plant = new String[1];
@@ -197,5 +198,15 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         }catch (NullPointerException n){
 
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                finish();
+                startActivity(new Intent(getApplicationContext(),Main2Activity.class));
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

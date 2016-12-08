@@ -215,9 +215,15 @@ public class Outstanding extends Fragment {
         session = new SessionManager(getContext().getApplicationContext());
         HashMap<String, String> user = session.getUserDetails();
         String gudang = user.get(SessionManager.keyGudang);
+        String [] gdg=gudang.trim().split(";");
         data_array= new ArrayList<String>();
         data_array.add("pilih gudang");
-        getListGudang();
+        for (int i=0; i<gdg.length; i++){
+            Log.d("data gudang"+i,gdg[i]);
+            data_array.add(gdg[i]);
+        }
+        Log.d("gudang",gudang);
+//        getListGudang();
         ArrayAdapter adp_list_kota = new ArrayAdapter(this.getActivity(),android.R.layout.simple_spinner_item,data_array);
         adp_list_kota.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spn_wh.setAdapter(adp_list_kota);
@@ -234,7 +240,7 @@ public class Outstanding extends Fragment {
                             .equalTo("date_scaned","0000-00-00 00:00:00")
                             .findAll();
                 }
-                Toast.makeText(getContext(),data_array.get(position),Toast.LENGTH_LONG).show();
+//                Toast.makeText(getContext(),data_array.get(position),Toast.LENGTH_LONG).show();
                 Log.d("isi realm",""+realmResults.size());
                 if (realmResults.size()>1){
                     for (int i = 0; i < realmResults.size(); i++){
@@ -271,24 +277,6 @@ public class Outstanding extends Fragment {
             }
         });
 
-
-
-//        RealmResults<SrtJalan> realmResults = getRealm.where(SrtJalan.class)
-//                                                .equalTo("date_scaned","0000-00-00 00:00:00")
-//                                                .findAll();
-//        Log.d("isi realm",""+realmResults.size());
-//        for (int i = 0; i < realmResults.size(); i++){
-//            listDataHeader.add(realmResults.get(i).getNosurat());
-//            List<String> detail = new ArrayList<String>();
-//            detail.add("Plant         : "+realmResults.get(i).getPlant());
-//            detail.add("Gudang        : "+realmResults.get(i).getGudang());
-//            detail.add("Tanggal Kirim : "+realmResults.get(i).getDate_sent());
-//            detail.add("No Polisi     : "+realmResults.get(i).getPolisi_no());
-//            listDataChild.put(listDataHeader.get(i), detail);
-//        }
-//
-//        listAdapter = new ExpendableListAdapter(getContext(),listDataHeader,listDataChild);
-//        expListView.setAdapter(listAdapter);
         return view;
     }
 
@@ -301,6 +289,7 @@ public class Outstanding extends Fragment {
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
         String plant = user.get(SessionManager.keyPlant);
+        String gudang = user.get(SessionManager.keyGudang);
 
         HashMap<String,String> params = new HashMap<String, String>();
 
@@ -312,6 +301,7 @@ public class Outstanding extends Fragment {
         getRealm = Realm.getDefaultInstance();
 
         params.put("plant_code",pabrik);
+        params.put("authorized_warehouse",gudang);
         Log.d("pabrik dari realm",pabrik);
         Log.d("plant dr session",""+plant);
         Log.d("param wh",""+params);
@@ -343,6 +333,7 @@ public class Outstanding extends Fragment {
                                 String wh=b.getString("warehouse_code");
                                 if (wh!=""){
                                     data_array.add(wh.trim());
+                                    Log.d("nama gudang",wh);
                                 }
                             }
                         }
