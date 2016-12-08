@@ -83,7 +83,7 @@ public class Main2Activity extends AppCompatActivity
     // urls to load navigation header background image
     // and profile image
     private static final String urlNavHeaderBg = "https://siva.jsstatic.com/id/20143/images/sol/20143_logo_0_11601.png";
-    private static final String urlProfileImg = "https://yt3.ggpht.com/-E_pUlsSjalk/AAAAAAAAAAI/AAAAAAAAAAA/xuBNGaofFA0/s900-c-k-no-rj-c0xffffff/photo.jpg";
+    private static final String urlProfileImg = "";
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;

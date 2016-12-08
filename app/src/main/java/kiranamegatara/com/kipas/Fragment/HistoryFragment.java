@@ -334,8 +334,8 @@ public class HistoryFragment extends Fragment {
             Log.d("tanggal terima", results.get(i).getDate_received());
             detail.add("Tanggal Terima,"+ tglTerima.substring(8,10) + "-"
                                         + tglTerima.substring(5,7) + "-"
-                                        + tglTerima.substring(0,4));//+ " "
-                                        //+ tglTerima.substring(11,16));
+                                        + tglTerima.substring(0,4) + " "
+                                        + tglTerima.substring(11,16));
             String tglScan = results.get(i).getDate_scaned();
             Log.d("tglscan ",tglScan);
             detail.add("Tanggal Scan,"+ tglScan.substring(8,10) + "-"

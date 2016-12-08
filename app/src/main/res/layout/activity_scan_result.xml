@@ -138,6 +138,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:text="Jam Terima"
+                android:id="@+id/txtJamTerima"
+                android:layout_column="0"
+                android:textSize="20dp" />
+
+            <TextView
+                android:text=":"
+                android:id="@+id/separator6"
+                android:layout_column="6"
+                android:textSize="20dp" />
+
+            <TextClock
+                android:text="00:00"
+                android:id="@+id/jamTerima"
+                android:layout_column="23"
+                android:textSize="20dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <Button
                 android:id="@+id/btnPick"
                 android:layout_width="wrap_content"
@@ -146,8 +170,23 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:onClick="setDate"
-                android:text="Change Date"
+                android:text="Ganti Tgl"
                 android:layout_column="23" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btnPickTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="Ganti Jam"
+                android:layout_column="23"/>
+
         </TableRow>
     </TableLayout>
 

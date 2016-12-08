@@ -1,14 +1,11 @@
 package kiranamegatara.com.kipas.Activity;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.icu.text.DateFormat;
-import android.icu.text.SimpleDateFormat;
-import android.net.ParseException;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,22 +13,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
-import java.util.List;
+import java.util.TimeZone;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -42,10 +37,11 @@ import kiranamegatara.com.kipas.R;
 import kiranamegatara.com.kipas.Controller.RealmHelper;
 
 public class ScanResultActivity extends AppCompatActivity {
-    TextView number,plant,tglKirim,tglTerima,nopol;
-    Button simpan,kembali;
+    TextView number,plant,tglKirim,tglTerima,nopol,jam;
+    Button simpan,kembali,btnChangeTime;
     private Calendar calendar;
     private int year, month, day;
+    private int hour,minute;
     String email;
     AQuery a;
     SessionManager session;
@@ -54,7 +50,10 @@ public class ScanResultActivity extends AppCompatActivity {
 
     String nosurat,tanggalKirim,pabrik,polisi_no,fullname,
             nik,gudang,date_scaned,getTanggalKirim,is_scaned;
+    String setTglTerima,setJamTerima;
     Realm realm,getRealm;
+
+    static final int TIME_DIALOG_ID = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +64,8 @@ public class ScanResultActivity extends AppCompatActivity {
         plant = (TextView)findViewById(R.id.Plant);
         tglKirim = (TextView)findViewById(R.id.tanggalKirim);
         tglTerima = (TextView)findViewById(R.id.tanggalTerima);
-        nopol = (TextView)findViewById(R.id.noPol); 
+        nopol = (TextView)findViewById(R.id.noPol);
+        jam = (TextView)findViewById(R.id.jamTerima);
 
         simpan = (Button)findViewById(R.id.btnTerima);
         kembali = (Button)findViewById(R.id.btnRescan);
@@ -81,14 +81,10 @@ public class ScanResultActivity extends AppCompatActivity {
         nosurat = intent.getStringExtra("surat_jalan_no");
         getTanggalKirim = intent.getStringExtra("tglKirim");
         tanggalKirim = getTanggalKirim.substring(0,10);
-       // tanggalKirim = "2016-11-22";
         Log.d("tanggal kirim", tanggalKirim);
         pabrik = intent.getStringExtra("plant");
         polisi_no = intent.getStringExtra("polisi_no");
         is_scaned = intent.getStringExtra("is_scaned");
-        //email = intent.getStringExtra("email_user");
-        //fullname = intent.getStringExtra("fullname");
-        //nik = intent.getStringExtra("nik");
         gudang = intent.getStringExtra("gudang");
 
         session = new SessionManager(getApplicationContext());
@@ -143,6 +139,8 @@ public class ScanResultActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        addListenerOnButton();
     }
 
     private void SaveSuratJalan() {
@@ -150,29 +148,40 @@ public class ScanResultActivity extends AppCompatActivity {
         //String url = "http://10.0.0.105/dev/fop/ws_sir/index.php/cls_ws_sir/scan_sj";
         String url = "https://www.kmshipmentstatus.com/ws_sir/index.php/cls_ws_sir/scan_sj";
 
-        date_scaned = String.valueOf(Calendar.DAY_OF_MONTH);
+        java.util.TimeZone tz = calendar.getTimeZone();
+//        Log.d("Time zone","="+tz.getDisplayName());
+//        date_scaned = String.valueOf(Calendar.DAY_OF_MONTH);
+//        android.text.format.DateFormat df = new android.text.format.DateFormat();
+//        df.format("yyyy-MM-dd hh:mm:ss", new java.util.Date());
+        Date date = new Date();
+        date_scaned = String.valueOf(date.getTime());
+
         /*
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(c.getTime());
         date_scaned = formattedDate;
         */
+        setTglTerima = date_scaned + setJamTerima;
         Log.d("date_received",""+ tglTerima.getText().toString());
         Log.d("srt_jln_no",""+ nosurat);
         Log.d("date_scaned",""+ date_scaned);
+        Log.d("date_scaned jam",""+ setJamTerima);
         Log.d("user_full_name",""+ fullname);
         Log.d("plant_code",""+ pabrik);
         Log.d("nik",""+ nik);
         Log.d("gudang",""+ gudang);
+        final String SPACE = " ";
 
         String tglterima = tglTerima.getText().toString();
-        String terima = tglterima.substring(6,10)+"-" + tglterima.substring(3,5) + "-"+tglterima.substring(0,2);
+        String terima = tglterima.substring(6,10)+"-" + tglterima.substring(3,5) + "-"+tglterima.substring(0,2)
+                +SPACE+ jam.getText().toString();
         Log.d("terima", ""+ terima);
 
 
         HashMap<String,String> params = new HashMap<String, String>();
         params.put("srt_jln_no",nosurat);
-        params.put("date_scaned",date_scaned);
+        params.put("date_scaned",setTglTerima);
         params.put("user_full_name",fullname);
         params.put("plant_code",pabrik);
         params.put("date_received",terima);
@@ -271,5 +280,61 @@ public class ScanResultActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(),Main2Activity.class);
         startActivity(intent);
         super.onBackPressed();
+    }
+
+
+
+    public void addListenerOnButton() {
+
+        btnChangeTime = (Button) findViewById(R.id.btnPickTime);
+
+        btnChangeTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                showDialog(TIME_DIALOG_ID);
+
+            }
+
+        });
+
+    }
+
+    @Nullable
+    @Override
+    protected Dialog onCreateDialog(int id, Bundle args) {
+        switch (id) {
+            case TIME_DIALOG_ID:
+                // set time picker as current time
+                return new TimePickerDialog(this, timePickerListener, hour, minute,
+                        false);
+
+        }
+        return null;
+    }
+
+
+
+    private TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
+        public void onTimeSet(TimePicker view, int selectedHour,
+                              int selectedMinute) {
+            hour = selectedHour;
+            minute = selectedMinute;
+
+            // set current time into textview
+            jam.setText(new StringBuilder().append(pad(hour))
+                    .append(":").append(pad(minute)));
+
+            setJamTerima = jam.getText().toString();
+
+        }
+    };
+
+    private static String pad(int c) {
+        if (c >= 10)
+            return String.valueOf(c);
+        else
+            return "0" + String.valueOf(c);
     }
 }
