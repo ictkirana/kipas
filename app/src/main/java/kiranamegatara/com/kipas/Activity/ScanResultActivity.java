@@ -45,6 +45,7 @@ public class ScanResultActivity extends AppCompatActivity {
     String email;
     AQuery a;
     SessionManager session;
+    int year1, month1, date, hour1, minute1, second;
 
     RealmHelper realmHelper;
 
@@ -159,15 +160,21 @@ public class ScanResultActivity extends AppCompatActivity {
 //        date_scaned = String.valueOf(Calendar.DAY_OF_MONTH);
 //        android.text.format.DateFormat df = new android.text.format.DateFormat();
 //        df.format("yyyy-MM-dd hh:mm:ss", new java.util.Date());
-        Date date = new Date();
-        date_scaned = String.valueOf(date.getTime());
+//        Date date = new Date();
+//        date_scaned = String.valueOf(date.getTime());
 
-        /*
+
+        final String SPACE = " ";
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = df.format(c.getTime());
-        date_scaned = formattedDate;
-        */
+        year1 = c.get(Calendar.YEAR);
+        month1 = c.get(Calendar.MONTH) + 1;
+        date = c.get(Calendar.DATE);
+        hour1 = c.get(Calendar.HOUR_OF_DAY);
+        minute1 = c.get(Calendar.MINUTE);
+        second = c.get(Calendar.SECOND);
+
+        date_scaned = year1 + "-" + month1 + "-" + date + SPACE + hour1 + ":" + minute1 + ":" + second;
+
         setTglTerima = date_scaned + setJamTerima;
         Log.d("date_received",""+ tglTerima.getText().toString());
         Log.d("srt_jln_no",""+ nosurat);
@@ -177,7 +184,6 @@ public class ScanResultActivity extends AppCompatActivity {
         Log.d("plant_code",""+ pabrik);
         Log.d("nik",""+ nik);
         Log.d("gudang",""+ gudang);
-        final String SPACE = " ";
 
         String tglterima = tglTerima.getText().toString();
         String terima = tglterima.substring(6,10)+"-" + tglterima.substring(3,5) + "-"+tglterima.substring(0,2)
