@@ -188,8 +188,6 @@ public class ScanResultActivity extends AppCompatActivity {
         String tglterima = tglTerima.getText().toString();
         String terima = tglterima.substring(6,10)+"-" + tglterima.substring(3,5) + "-"+tglterima.substring(0,2)
                 +SPACE+ jam.getText().toString();
-        Log.d("terima", ""+ terima);
-
 
         HashMap<String,String> params = new HashMap<String, String>();
         params.put("srt_jln_no",nosurat);
