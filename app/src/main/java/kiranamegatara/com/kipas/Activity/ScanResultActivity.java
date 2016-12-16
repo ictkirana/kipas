@@ -54,7 +54,7 @@ public class ScanResultActivity extends AppCompatActivity {
     String setTglTerima,setJamTerima;
     Realm realm,getRealm;
 
-    static final int TIME_DIALOG_ID = 999;
+    static final int TIME_DIALOG_ID = 998;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,7 @@ public class ScanResultActivity extends AppCompatActivity {
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
         showDate(year, month + 1, day);
+//        showTime(hour,minute);
 
         Intent intent = getIntent();
         nosurat = intent.getStringExtra("surat_jalan_no");
@@ -245,6 +246,20 @@ public class ScanResultActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Pilih Tangal", Toast.LENGTH_SHORT)
                 .show();
     }
+
+//    private void showTime(int hour, int minute) {
+//        // set current time into textview
+//        jam.setText(new StringBuilder().append(pad(hour))
+//                .append(":").append(pad(minute)));
+//    }
+//
+//    @SuppressWarnings("deprecation")
+//    public void setTime(View view){
+//        showDialog(998);
+//        //akan menampilkan teks ketika kalendar muncul setelah menekan tombol
+//        Toast.makeText(getApplicationContext(), "Pilih Waktu", Toast.LENGTH_SHORT)
+//                .show();
+//    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
