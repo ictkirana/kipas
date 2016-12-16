@@ -55,6 +55,7 @@ public class ScanResultActivity extends AppCompatActivity {
     Realm realm,getRealm;
 
     static final int TIME_DIALOG_ID = 998;
+    static final int TIME_DIALOG_ID2 = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,11 +312,38 @@ public class ScanResultActivity extends AppCompatActivity {
     @Nullable
     @Override
     protected Dialog onCreateDialog(int id, Bundle args) {
+        String tahun,bulan,hari;
+        int thn,bln,hri;
         switch (id) {
             case TIME_DIALOG_ID:
                 // set time picker as current time
                 return new TimePickerDialog(this, timePickerListener, hour, minute,
                         false);
+
+            case TIME_DIALOG_ID2:
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, myDateListener, year, month, day);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+                Log.d("date scaned pilih",""+ date_scaned);
+                Log.d("is scaned pilih",""+ is_scaned);
+                if (is_scaned.equalsIgnoreCase("0") ) {
+                    tahun = tanggalKirim.substring(0,4);
+                    bulan = tanggalKirim.substring(5,7);
+                    hari = tanggalKirim.substring(8,10);
+                    thn = Integer.parseInt(tahun);
+                    bln = Integer.parseInt(bulan);
+                    hri = Integer.parseInt(hari);
+                    Log.d("tanggal",""+ thn +"-"+bln+"-"+hri);
+                    calendar.set(thn,bln-1,hri);
+                    //calendar.isWeekDateSupported();
+                } else {
+                    if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+                        calendar.add(Calendar.DAY_OF_MONTH, -3);
+                    } else {
+                        calendar.add(Calendar.DAY_OF_MONTH, -1);
+                    }
+                }
+                datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+                return datePickerDialog;
 
         }
         return null;
