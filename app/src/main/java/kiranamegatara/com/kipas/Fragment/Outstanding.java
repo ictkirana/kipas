@@ -241,6 +241,8 @@ public class Outstanding extends Fragment {
                             .findAll();
                 }
 //                Toast.makeText(getContext(),data_array.get(position),Toast.LENGTH_LONG).show();
+                listDataHeader.clear();
+                listDataChild.clear();
                 Log.d("isi realm",""+realmResults.size());
                 if (realmResults.size()>1){
                     for (int i = 0; i < realmResults.size(); i++){
