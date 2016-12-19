@@ -193,7 +193,8 @@ public class ScanResultActivity extends AppCompatActivity {
 
         HashMap<String,String> params = new HashMap<String, String>();
         params.put("srt_jln_no",nosurat);
-        params.put("date_scaned",setTglTerima);
+//        params.put("date_scaned",setTglTerima);
+        params.put("date_scaned",date_scaned);
         params.put("user_full_name",fullname);
         params.put("plant_code",pabrik);
         params.put("date_received",terima);
