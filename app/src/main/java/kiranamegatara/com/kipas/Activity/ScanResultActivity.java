@@ -177,11 +177,11 @@ public class ScanResultActivity extends AppCompatActivity {
 
         date_scaned = year1 + "-" + month1 + "-" + date + SPACE + hour1 + ":" + minute1 + ":" + second;
 
-        setTglTerima = date_scaned + setJamTerima;
+//        setTglTerima = date_scaned + setJamTerima;
         Log.d("date_received",""+ tglTerima.getText().toString());
         Log.d("srt_jln_no",""+ nosurat);
-        Log.d("date_scaned",""+ date_scaned);
-        Log.d("date_scaned jam",""+ setJamTerima);
+//        Log.d("date_scaned",""+ date_scaned);
+//        Log.d("date_scaned jam",""+ setJamTerima);
         Log.d("user_full_name",""+ fullname);
         Log.d("plant_code",""+ pabrik);
         Log.d("nik",""+ nik);
@@ -200,6 +200,7 @@ public class ScanResultActivity extends AppCompatActivity {
         params.put("date_received",terima);
         params.put("nik",nik);
         params.put("warehouse_code",gudang);
+        Log.d("date_scaned",""+ date_scaned);
 
         ProgressDialog progress = new ProgressDialog(getApplicationContext());
         progress.setMessage("simpan data...");
