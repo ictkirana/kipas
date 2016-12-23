@@ -45,7 +45,7 @@ public class ScanResultActivity extends AppCompatActivity {
     String email;
     AQuery a;
     SessionManager session;
-    int year1, month1, date, hour1, minute1, second;
+    int year1; int month1; int date; int hour1; int minute1; int second;
 
     RealmHelper realmHelper;
 
@@ -172,10 +172,21 @@ public class ScanResultActivity extends AppCompatActivity {
         month1 = c.get(Calendar.MONTH) + 1;
         date = c.get(Calendar.DATE);
         hour1 = c.get(Calendar.HOUR_OF_DAY);
+
         minute1 = c.get(Calendar.MINUTE);
         second = c.get(Calendar.SECOND);
-
-        date_scaned = year1 + "-" + month1 + "-" + date + SPACE + hour1 + ":" + minute1 + ":" + second;
+        String hour_sc,mnt_sc;
+        if (hour1<10){
+            hour_sc="0"+hour1;
+        }else {
+            hour_sc=String.valueOf(hour1);
+        }
+        if (minute1<10){
+            mnt_sc="0"+minute1;
+        }else {
+            mnt_sc=String.valueOf(minute1);
+        }
+        date_scaned = year1 + "-" + month1 + "-" + date + SPACE + hour_sc + ":" + mnt_sc; //+ ":" + second;
 
 //        setTglTerima = date_scaned + setJamTerima;
         Log.d("date_received",""+ tglTerima.getText().toString());
@@ -198,9 +209,10 @@ public class ScanResultActivity extends AppCompatActivity {
         params.put("user_full_name",fullname);
         params.put("plant_code",pabrik);
         params.put("date_received",terima);
-        params.put("nik",nik);
+        params.put("user_nik",nik);
         params.put("warehouse_code",gudang);
         Log.d("date_scaned",""+ date_scaned);
+        Log.d("param_save_sj",params.toString());
 
         ProgressDialog progress = new ProgressDialog(getApplicationContext());
         progress.setMessage("simpan data...");
